@@ -1,0 +1,19 @@
+---
+layout: post
+title: "PostgreSQL 8.2.x em Ubuntu > 8.04"
+date: 2010-04-13
+comments: false
+categories:
+ - postgresql
+---
+
+<div class='post'>
+Como é de conhecimento de todos as versões do Ubuntu superiores a 8.04 (hardy) não possuem em seus repositórios padrões o PostgreSQL 8.2.x, então o caminho natural para que seja feita a instalação é download dos fontes, compilar e instalar... para quem tem bastante intimidade com Linux + PostgreSQL essa é uma atividade corriqueira e que normalmente é realizada em ambientes de produção.<br /><br />Porém tenho recebido de clientes e amigos questionamentos de como instalar, de maneira mais simples, o PostgreSQL 8.2.x em Ubuntu &gt; 8.04, pois bem então ai vai a dica.<br /><br />No console, como usuário root, execute:<br /><br /><span style="font-size: 85%;"><span style="font-family: 'courier new';">$ apt-get update</span><span style="font-family: 'courier new';"><br /><br />$ echo "deb http://archive.ubuntu.com/ubuntu/ hardy main universe" &gt; /etc/apt/sources.list.d/ubuntu-8.04.list</span><span style="font-family: 'courier new';"><br /><br />$ apt-get update</span><span style="font-family: 'courier new';"><br /><br />$ apt-get install postgresql-8.2</span><span style="font-family: 'courier new';"><br /><br />$ rm -f /etc/apt/sources.list.d/ubuntu-8.04.list</span><span style="font-family: 'courier new';"><br /><br />$ apt-get update</span><br /></span><br /><br />Com isso basta executar um <span style="font-weight: bold;">pg_lsclusters</span> ou um <span style="font-weight: bold;">dpkg --list 'postgresql*' </span>no console que poderão verificar que a versão 8.2.7 estará instalada.<br /><br />Um pequeno contratempo em relação a essa abordagem é que teremos a versão 8.2.7 instalada e atualmente já temos disponível a 8.2.16, mas é possível sim atualizar a versão através da compilação pelos fontes mantendo toda a infra-estrutura do Ubuntu com o postgresql-common, mas isso fica para um próximo post.<br /><br />Por favor reportem possíveis problemas com esse mini-tutorial.<br /><br /><br />Cordialmente,<br /><br />Fabrízio de Royes Mello<br />fabriziomello [at] gmail.com</div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Alvaro Borges</div>
+<div class='content'>
+Deu muito certo aqui a instalação OBRIGADO!</div>
+</div>
+</div>

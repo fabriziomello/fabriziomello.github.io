@@ -1,0 +1,44 @@
+---
+layout: post
+title: "Compilando o pgAdmin 1.10.0 no Ubuntu 9.04"
+date: 2009-07-01
+comments: false
+categories:
+ - postgresql
+---
+
+<div class='post'>
+Ontem (30/06/2009) como já anunciado no blog foi liberada a nova versão do <a href="http://www.pgadmin.org">pgAdmin</a>, entretanto ainda não foram disponibilizadas versões compiladas do mesmo para Linux.<br /><br />Então para instalar não teve jeito, tive de fazer download dos fontes e compilar e para isso tive de seguir os seguinte passos:<br /><br />1) Instalar os pré-requisitos<br /><br />sudo apt-get install build-essential<br />sudo apt-get install libxml2-dev<br />sudo apt-get install libgtk2.0-dev<br />sudo apt-get install libxslt1-dev<br />sudo apt-get install postgresql-server-dev-8.3<br />sudo apt-get install libwxbase2.8-dev<br />sudo apt-get install libwxgtk2.8-dev<br /><br />2) Download do pgAdmin<br /><br /><a href="http://www.pgadmin.org/download/">http://www.pgadmin.org/download/</a><br /><br /><br />3) Descompactar os fontes<br /><br />tar xzvf pgadmin3-1.10.0.tar.gz<br /><br /><br />4) Compilar e instalar<br /><br />cd pgadmin3-1.10.0<br />./configure --with-pgsql=/usr/lib/postgresql/8.3 --prefix=/usr/local/pgadmin3<br />make<br />make install<br /><br /><br />5) Agora basta executá-lo<br /><br />/usr/local/pgadmin3<br /><br /><br />Uma peculiaridade é que no meu caso tenho o <a href="http://www.postgresql.org/">PostgreSQL 8.3</a> instalado no meu Desktop então utilizei o pacote de desenvolvimento desta versão, mas creio que não exista problema algum em utilizar versões anteriores como a 8.2 ou 8.1.<br /><br />Outro detalhe é que apesar de eu estar utilizando o <a href="http://www.ubuntu.com">Ubuntu 9.04</a> esse processo deve ser o igual para versões anteriores e até mesmo para o próprio <a href="http://www.debian.org">Debian</a>.<br /><br />Fazendo isso temos o nosso pgAdmin 1.10.0 pronto para ser utilizado, bem simples e rápido.<br /><br /><br />Cordialmente,<br /><br />Fabrízo de Royes Mello<br />fabriziomello [at] gmail.com</div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Fabrízio de Royes Mello</div>
+<div class='content'>
+Caro Beto,<br /><br />Esse artigo é somente sobre compilação/instalação do pgadmin 1.10, portanto não irá interferir na sua instalação existente do PostgreSQL.<br /><br /><br />Cordialmente,<br /><br />Fabrízo de Royes Mello<br />fabriziomello [at] gmail.com</div>
+</div>
+<div class='comment'>
+<div class='author'>betolima</div>
+<div class='content'>
+Fabrizio, já tenho o postgre 8.3 instalado no meu ubuntu e quero somente instalar o pgadmin3. Estas dicas suas são para instalar somente o pgadmin?<br />Tenho medo de instalar o banco novamente, não posso fazer isso senão perco todos os meus dados, por isso quero instalar somente o pgadmin3. Posso seguir o seu tuto? valeu</div>
+</div>
+<div class='comment'>
+<div class='author'>Fabrízio de Royes Mello</div>
+<div class='content'>
+Interessante, pois aqui no meu Ubuntu 9.04 esse link já existe:<br /><br />[dbseller@dbseller-note07:/dados]$ ls -al /usr/lib/libcrypto.*<br />-rw-r--r-- 1 root root 2262370 2009-06-11 12:34 /usr/lib/libcrypto.a<br />lrwxrwxrwx 1 root root      23 2009-07-01 00:15 /usr/lib/libcrypto.so -&gt; /lib/libcrypto.so.0.9.8<br />lrwxrwxrwx 1 root root      23 2009-06-26 08:33 /usr/lib/libcrypto.so.0.9.8 -&gt; /lib/libcrypto.so.0.9.8<br /><br /><br />Cordialmente,<br /><br />Fabrízo de Royes Mello<br />fabriziomello [at] gmail.com</div>
+</div>
+<div class='comment'>
+<div class='author'>Anonymous</div>
+<div class='content'>
+Tive que criar um link simbolico para o libcrypto.<br />sudo ln -s /usr/lib/libcrypto.so.0.9.8 /usr/lib /libcrypto.so</div>
+</div>
+<div class='comment'>
+<div class='author'>Fabrízio de Royes Mello</div>
+<div class='content'>
+Você instalou o meta-pacote &quot;build-essential&quot; conforme o item 1 ??<br /><br />Porque até onde sei o compilador C++ é instalado quando instalamos esse meta-pacote &quot;build-essential&quot;.<br /><br />Uma pequena verificação que você pode fazer para saber se o compilador está instalado:<br /><br />dpkg --list &#39;g++*&#39;<br /><br />Se o problema persistir tente instalar individualmente os seguintes pacotes:<br /><br />apt-get install libc6-dev<br />apt-get install libc-dev<br />apt-get install g++<br />apt-get install make<br />apt-get install dpkg-dev<br /><br />Cordialmente,<br /><br />Fabrízo de Royes Mello<br />fabriziomello [at] gmail.com</div>
+</div>
+<div class='comment'>
+<div class='author'>Anonymous</div>
+<div class='content'>
+olá<br />no passo 4) Compilar e instalar retornou o seguinte erro:<br />configure: error: could not find a suitable C++ compiler to build pgAdmin</div>
+</div>
+</div>

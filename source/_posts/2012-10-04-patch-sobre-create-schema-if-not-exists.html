@@ -1,0 +1,14 @@
+---
+layout: post
+title: "Patch sobre CREATE SCHEMA IF NOT EXISTS aceito para o PostgreSQL 9.3devel"
+date: 2012-10-04
+comments: false
+categories:
+ - 9.3devel
+ - git
+ - patch
+ - postgresql
+---
+
+<div class='post'>
+Após algumas discussões [1] meu patch para adicionar a cláusula "IF NOT EXISTS" no "CREATE SCHEMA" foi aceito e efetuado o commit na branch master do git oficial do PostgreSQL [2] pelo commiter Mr. Tom Lane.<br /><br />Agora na 9.3 poderemos usar a cláusula "IF NOT EXISTS" no "CREATE SCHEMA" para que não gere um erro (cancelando transação atual) caso o esquema que está sendo criado já exista, por exemplo:<br /><br />BEGIN;<br />&nbsp; CREATE SCHEMA IF NOT EXISTS foo;<br />&nbsp; CREATE TABLE foo.bar();<br />COMMIT;<br /><br />O exemplo acima caso o esquema "foo" já exista não será gerado um erro e a transação irá prosseguir normalmente. O comportamento é similar ao já existente "IF NOT EXISTS" do "CREATE TABLE" [3].<br /><br />[1]&nbsp;<a href="https://commitfest.postgresql.org/action/patch_view?id=907">https://commitfest.postgresql.org/action/patch_view?id=907</a><br />[2]&nbsp;<a href="http://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=fb34e94d214d6767910df47aa7c605c452d11c57">http://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=fb34e94d214d6767910df47aa7c605c452d11c57</a><br />[3]&nbsp;<a href="http://www.postgresql.org/docs/9.2/interactive/sql-createtable.html">http://www.postgresql.org/docs/9.2/interactive/sql-createtable.html</a><br /><br />---<br />Fabrízio de Royes Mello<br />fabriziomello [at] gmail.com</div>
