@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Oficina | Fabrízio de Royes Mello]]></title>
+  <link href="http://fabriziomello.github.io/blog/categories/oficina/atom.xml" rel="self"/>
+  <link href="http://fabriziomello.github.io/"/>
+  <updated>2014-03-28T12:48:20-03:00</updated>
+  <id>http://fabriziomello.github.io/</id>
+  <author>
+    <name><![CDATA[Fabrízio de Royes Mello]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[CONSEGI 2010]]></title>
+    <link href="http://fabriziomello.github.io/blog/2010/08/21/consegi-2010/"/>
+    <updated>2010-08-21T00:00:00-03:00</updated>
+    <id>http://fabriziomello.github.io/blog/2010/08/21/consegi-2010</id>
+    <content type="html"><![CDATA[<div class='post'>
+Nos dias 18, 19 e 20 de agosto/2010 ocorreu o evento denominado <a href="http://www.consegi.gov.br/">CONSEGI2010</a>, onde tive oportunidade de participar como palestrante/instrutor em algumas atividades relacionadas ao <a href="http://www.postgresql.org.br/">PostgreSQL</a>.<br /><div><br /></div><div>Abaixo seguem os links para download dos arquivos da palestra de das oficinas que ministrei:</div><div><br /></div><div><a href="http://www.slideshare.net/fabriziomello/database-refactoring-postgresqlconsegi2010">Dia 19/08 - Palestra: Database Refactoring com PostgreSQL</a></div><div><a href="http://www.slideshare.net/fabriziomello/oficina-postgresql-basicoconsegi2010">Dia 20/08 - Oficina: PostgreSQL Básico</a></div><div><a href="http://www.slideshare.net/fabriziomello/oficina-postgresql-avanadoconsegi2010">Dia 20/02 - Oficina: PostgreSQL Avançado</a></div><div><br /></div><div>Obrigado a todos que estiveram presentes prestigiando o evento e as atividades que exerci.</div><div><br /></div><div>Cordialmente,</div><div><br /></div><div>Fabrízio de Royes Mello</div><div>fabriziomello [at] gmail.com</div><div><br /></div></div>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Code Smell | Fabrízio de Royes Mello]]></title>
+  <link href="http://fabriziomello.github.io/blog/categories/code-smell/atom.xml" rel="self"/>
+  <link href="http://fabriziomello.github.io/"/>
+  <updated>2014-03-28T12:48:20-03:00</updated>
+  <id>http://fabriziomello.github.io/</id>
+  <author>
+    <name><![CDATA[Fabrízio de Royes Mello]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Bad Smells (Mal Cheiros) Em Bancos De Dados]]></title>
+    <link href="http://fabriziomello.github.io/blog/2013/06/10/bad-smells-mal-cheiros-em-bancos-de/"/>
+    <updated>2013-06-10T00:00:00-03:00</updated>
+    <id>http://fabriziomello.github.io/blog/2013/06/10/bad-smells-mal-cheiros-em-bancos-de</id>
+    <content type="html"><![CDATA[<div class='post'>
+Uma estrutura de um banco de dados, diferentemente da estrutura de um software, tende a deteriorar naturalmente com o passar do tempo. Dentre várias causas de deterioração podemos citar o crescimento progressivo do volume de dados devido ao aumento natural de usuários que o utilizam e também ao seu próprio tempo de uso, tornando um modelo de dados que no início era eficiente para solução proposta em um modelo ineficiente e defasado.<br /><br />Essa deterioração natural aliada a mudanças em requisitos de negócio exigem modificações e refatorações tanto no software que os implementa quanto em seus bancos de dados. Entretanto a <a href="http://fabriziomello.blogspot.com.br/2013/06/database-refactoring.html">refatoração de um banco de dados</a> é mais complexa que a de um software devido aos seguintes motivos: (i) além de manter comportamento também é necessário manter as informações (dados) e (ii) acoplamento com diversas origens (outras aplicações, <i>frameworks</i>, integrações, etc).<br /><br />Devido a essas dificuldades a evolução de uma estrutura de banco de dados torna-se um desafio, ocorrendo assim um fenômeno conhecido como <i>Bad Smells</i>&nbsp;(mal cheiros), da mesma forma que ocorre com o código de um software. Em software um <a href="http://martinfowler.com/bliki/CodeSmell.html"><i>code smell</i>&nbsp;(<i>bad smell</i>)</a> é uma categoria comum de problema no código fonte que indica a necessidade de refatoração, e o mesmo ocorre com bancos de dados, onde são chamados <i><a href="http://www.agiledata.org/essays/databaseRefactoringSmells.html">database smells</a></i>.<br /><br />Abaixo segue uma lista de alguns <i><a href="http://www.agiledata.org/essays/databaseRefactoringSmells.html">database smells</a></i>:<br /><ul><li><i>Multi-purpose column</i> (coluna com mais de uma função)</li><li><i>Multi-purpose table</i> (tabela com mais de uma função)</li><li><i>Redundant data</i> (dados redundantes/repetidos)</li><li><i>Tables with many columns</i> (tabelas com muitas colunas)</li><li><i>"Smart" columns</i> (colunas "espertas")</li><li><i>Lack of constraints</i> (falta de restrições)</li><li><i>Fear of change</i> (medo da mudança)</li></ul><div>Dentre os <i>database smells</i>&nbsp;citados acima, devemos ter atenção especial ao "<i>Fear of change</i>", pois pode ser considerado o pior de todos, pois:</div><div><ul><li>inibe a inovação,&nbsp;</li><li>reduz a efetividade,&nbsp;</li><li>produz ainda mais bagunça e&nbsp;</li><li>ao longo do tempo a situação fica cada vez pior.&nbsp;</li></ul></div><div>Lembra do valor "<a href="http://desenvolvimentoagil.com.br/xp/valores/coragem/">Coragem</a>" do <a href="http://desenvolvimentoagil.com.br/xp/">XP</a> (eXtreme Programming)? Mudança é algo que deve ser considerado natural e irá acontecer em projetos de software, isso é um fato, não podemos fugir disso, então precisamos das práticas e ferramentas adequadas para que a mudança não seja um entrave na evolução do seu projeto, e sim algo natural e, de certa forma, trivial para sua equipe, e o mesmo deve ocorrer com seu banco de dados.</div><div><br /></div><div>Esse post é apenas uma introdução a este assunto pouco explorado e que tenho como proposta para conclusão de <a href="http://www.uniritter.edu.br/pos/tecnologia/metodos_ageis/">Pós-Graduação em Tecnologias Aplicadas a Sistemas de Informações com Métodos Ágeis</a> que estou realizando na&nbsp;<a href="http://www.uniritter.edu.br/">http://www.uniritter.edu.br</a>.</div><div><br /></div><div>A idéia é montar uma <a href="http://pt.wikipedia.org/wiki/Taxonomia">taxonomia</a> de <i>Database Smells</i> através de um catálogo, inclusive sugerindo os <i><a href="http://fabriziomello.blogspot.com.br/2013/06/database-refactoring.html">Database Refactoring</a></i> que podem ser utilizados em sua solução, e futuramente, quem sabe em um futuro trabalho de Mestrado fazer um paralelo dos <i>Database Smells</i>&nbsp;com <i>Code Smells</i>, principalmente se os mal cheiros em códigos podem refletir mal cheiros no seu banco de dados. ;-)</div></div>
+
+
+<h2>Comments</h2>
+
+
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Gabriel Prestes</div>
+<div class='content'>
+Excelente o post Fabrízio, pela introdução ao assunto, aguardo novos posts. </div>
+</div>
+<div class='comment'>
+<div class='author'>Fabrízio de Royes Mello</div>
+<div class='content'>
+O formato do trabalho será de um artigo científico e não de um TCC, porque é para conclusão de uma Pós-Graduação e não Graduação.<br /><br />Mas com certeza vou compartilhar quando estiver pronto.<br /><br />Obrigado.</div>
+</div>
+<div class='comment'>
+<div class='author'>Webeople</div>
+<div class='content'>
+Bom trabalho, meu caro.<br /><br />Quando o tcc estiver pronto, compartilha aí. Gostaria muito de ler.<br /><br />Abs,</div>
+</div>
+<div class='comment'>
+<div class='author'>Eduardo A. Fiorezi</div>
+<div class='content'>
+Muito bom Fabrízio. Ainda não tive a oportunidade de ler o Database Refactoring, mas na época que foi lançado eu estava escrevendo meu tcc.. Ótimo artigo. Abraços</div>
+</div>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

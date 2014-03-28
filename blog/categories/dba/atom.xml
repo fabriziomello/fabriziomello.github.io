@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Dba | Fabrízio de Royes Mello]]></title>
+  <link href="http://fabriziomello.github.io/blog/categories/dba/atom.xml" rel="self"/>
+  <link href="http://fabriziomello.github.io/"/>
+  <updated>2014-03-28T12:48:20-03:00</updated>
+  <id>http://fabriziomello.github.io/</id>
+  <author>
+    <name><![CDATA[Fabrízio de Royes Mello]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Vaga DBA PostgreSQL Em Porto Alegre/RS]]></title>
+    <link href="http://fabriziomello.github.io/blog/2010/10/12/vaga-dba-postgresql-em-porto-alegrers/"/>
+    <updated>2010-10-12T00:00:00-03:00</updated>
+    <id>http://fabriziomello.github.io/blog/2010/10/12/vaga-dba-postgresql-em-porto-alegrers</id>
+    <content type="html"><![CDATA[<div class='post'>
+<span class="Apple-style-span" style="border-collapse: collapse; font-family: arial, sans-serif; font-size: 13px;">Pessoal,</span><br /><div><br /></div><div>Estamos com uma vaga para DBA PostgreSQL em Porto Alegre/RS, com as seguintes requisitos:</div><div><br /></div><div><div><b>ATRIBUIÇÕES:</b></div><div><ol><li>instalar/configurar Linux para posterior instalação do PostgreSQL</li><li>instalar/configurar o PostgreSQL na empresa (produção, desenvolvimento e testes) e nos clientes (produção e testes)</li><li>implantação e manutenção de políticas e rotinas de backup das bases de dados da empresa e dos clientes (scripts de backup padronizados)</li><li>implantação e manutenção de polĩticas e rotinas de segurança de dados</li><li>monitorar servidores PostgreSQL da empresa e dos clientes (coletar informações e estatísticas para geração de base de conhecimento dos clientes)</li><li>atender chamados dos clientes por eventuais problemas relacionados ao servidor de Banco de Dados PostgreSQL</li><li>apoio aos programadores na criação de SQLs complexos, bem como na construção de procedimentos armazenados e funções (stored procedures e functions)</li><li>apoio aos programadores na modelagem física de banco de dados</li><li>realizar migrações de versão do PostgreSQL</li><li>sugerir boas práticas de uso de SQL e Modelos de Dados a equipe de desenvolvimento</li><li>capacitação da equipe de desenvolvimento da empresa no uso de novos recursos oferecidos pelo PostgreSQL</li><li>otimização de performance (tunnig) do PostgreSQL e sistema operacional (Linux)</li></ol></div><div><br /></div><div><b>CONHECIMENTOS:</b></div><div><ol><li>PostgreSQL</li><li>Linux</li><li>Shell Script</li><li>Programação PHP (desejável)</li></ol></div></div><div><br /></div><div><br /></div><div>Interessados enviar Curriculum por e-mail para <b><u>curriculos [at] dbseller.com.br</u></b>&nbsp;que após análise inicial dos mesmos entraremos em contato para agendar entrevista.</div><div><br /></div><div>Cordialmente,</div><div><br /></div><div>Fabrízio de Royes Mello</div><div>fabriziomello [at] gmail.com</div></div>
+
+]]></content>
+  </entry>
+  
+</feed>

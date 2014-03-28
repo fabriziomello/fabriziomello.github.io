@@ -1,0 +1,275 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>PostgreSQL Na Memória RAM (In-Memory Database) - Fabrízio de Royes Mello</title>
+  <meta name="author" content="Fabrízio de Royes Mello">
+
+  
+  <meta name="description" content="Recentemente (dia 24/06/2010) em seu blog, replicado no planet-postgresql, o Sr. Robert Haas postou o artigo denominado &#8221;PostgreSQL as an In- &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fabriziomello.github.io/blog/2010/06/27/postgresql-na-memoria-ram-in-memory">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Fabrízio de Royes Mello" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49388509-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Fabrízio de Royes Mello</a></h1>
+  
+    <h2>Blog sobre Tecnologia da Informação</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fabriziomello.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">PostgreSQL Na Memória RAM (In-Memory Database)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-27T00:00:00-03:00" pubdate data-updated="true">Jun 27<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+Recentemente (dia 24/06/2010) em seu blog, replicado no <a href="http://planet.postgresql.org/">planet-postgresql</a>, o <a href="http://rhaas.blogspot.com/">Sr. Robert Haas</a> postou o artigo denominado &#8221;<a href="http://rhaas.blogspot.com/2010/06/postgresql-as-in-memory-only-database_24.html">PostgreSQL as an In-Memory Only Database</a>&#8221;.<br /><br />Baseado em seu relato e no abordado na lista <a href="http://archives.postgresql.org/pgsql-performance/">pgsql-performance</a> montei este pequeno tutorial para exemplificar na prática o que foi discutido, ou seja, uma forma fácil e rápida de criar o seu próprio &#8220;PostgreSQL as an In-Memory Database&#8221;.<br /><br />Estou utilizando o Ubuntu 9.04 e PostgreSQL 8.3 para executar as atividades:<br /><br />1) Montando partição em memória com <a href="http://en.wikipedia.org/wiki/Tmpfs">tmpfs</a>:<br /><br /><span style="font-size: 85%;"><span style="font-family: 'courier new';">$ sudo -s</span><span style="font-family: 'courier new';"><br /><br />$ mkdir /mnt/in_memory</span><span style="font-family: 'courier new';"><br /><br />$ mount -t tmpfs -o size=2G,nr_inodes=8k,mode=0700 tmpfs /mnt/in_memory/</span><br /><br /></span><br />2) Criando cluster na partição criada:<span style="font-size: 85%;"><span style="font-family: 'courier new';"><br /><br />$ chown -R postgres. /mnt/in_memory/</span><span style="font-family: 'courier new';"><br /><br />$ su - postgres -c &#8220;/usr/lib/postgresql/8.3/bin/initdb -D /mnt/in_memory&#8221;</span><br /><br /><br /></span>3) Ajustando configurações do cluster (conforme recomendações do artigo citado):<span style="font-size: 85%;"><span style="font-family: 'courier new';"><br /><br />$ vim /mnt/in_memory/postgresql.conf</span><span style="font-family: 'courier new';"><br /><br />fsync=off</span><span style="font-family: 'courier new';"><br />synchronous_commit=off</span><span style="font-family: 'courier new';"><br />full_page_writes=off</span><span style="font-family: 'courier new';"><br />bgwriter_lru_maxpages=0</span></span><br /><br />Obs: caso vc já tenha algum processo do PostgreSQL executando na mesma máquina desse teste então vc deve verificar se não será necessário modificar também a variável &#8220;port&#8221; do postgresql.conf, pois o padrão é 5432.<br /><br /><br />4) Iniciando processo servidor:<span style="font-size: 85%;"><span style="font-family: 'courier new';"><br /><br />$ su - postgres -c &#8220;/usr/lib/postgresql/8.3/bin/pg_ctl -D /mnt/in_memory -l /mnt/in_memory/postgres.log start&#8221;</span></span><br /><br /><br />5) Verificando se o cluster está funcionando:<span style="font-size: 85%;"><span style="font-family: 'courier new';"><br /><br />$ ps ax | grep post</span><span style="font-family: 'courier new';"><br />19614 pts/3    S      0:00 /usr/lib/postgresql/8.3/bin/postgres -D /mnt/in_memory</span><span style="font-family: 'courier new';"><br />19653 ?            Ss     0:00 postgres: writer process</span><span style="font-family: 'courier new';"><br />19654 ?     Ss     0:00 postgres: wal writer process<br /></span><span style="font-family: 'courier new';">19655 ?            Ss     0:00 postgres: autovacuum launcher process</span><span style="font-family: 'courier new';"><br />19656 ?            Ss     0:00 postgres: stats collector process<br /><br /></span><span style="font-family: 'courier new';">$ /usr/lib/postgresql/8.3/bin/psql -U postgres -p 5437 -l</span><span style="font-family: 'courier new';"><br />Lista dos bancos de dados</span><span style="font-family: 'courier new';"><br />Nome    |   Dono   | Codificação </span><span style="font-family: 'courier new';"><br />&#8212;&#8212;&#8212;&#8211;+&#8212;&#8212;&#8212;-+&#8212;&#8212;&#8212;&#8212;-</span><span style="font-family: 'courier new';"><br />postgres  | postgres | UTF8</span><span style="font-family: 'courier new';"><br />template0 | postgres | UTF8</span><span style="font-family: 'courier new';"><br />template1 | postgres | UTF8</span><span style="font-family: 'courier new';"><br />(3 registros)</span></span><br /><br />Acredito que neste ponto você já esteja com o seu PostgreSQL na memória pronto e funcional.<br /><br />Lembre-se que o mesmo está &#8220;literalmente&#8221; na memória RAM, portanto ao desligar o micro o seu cluster inteiro será perdido, por isso o seu uso fica limitado como um Cache ao invés do uso do memcached ou alternativas NoSQL, porém com todos recursos disponíveis no PostgreSQL.<br /><br /><br />Por favor reportem problemas com esse mini-tutorial e/ou críticas e sugestões.<br /><br /><br />Cordialmente,<br /><br />Fabrízio de Royes Mello<br />fabriziomello [at] gmail.com</div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Fabrízio de Royes Mello</div>
+<div class='content'>
+Tem sim, mas se a sua necessidade é de manter os dados então creio que essa técnica não atenda a sua necessidade. Até mesmo porque um desligamento indevido do equipamento irá ocasionar a perda da partição.<br /><br />Cordialmente,<br /><br />Fabrízio de Royes Mello<br />fabriziomello [at] gmail.com</div>
+</div>
+<div class='comment'>
+<div class='author'>Moisés P. Sena</div>
+<div class='content'>
+Achei interessante a idéia!<br />Não tem um recurso para quando der o halt na máquina, antes de desligar tudo copiar os arquivos para o HD?</div>
+</div>
+</div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Fabrízio de Royes Mello</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-27T00:00:00-03:00" pubdate data-updated="true">Jun 27<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/in-memory-database/'>in-memory database</a>, <a class='category' href='/blog/categories/postgresql/'>postgresql</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fabriziomello.github.io/blog/2010/06/27/postgresql-na-memoria-ram-in-memory/" data-via="fabriziomello" data-counturl="http://fabriziomello.github.io/blog/2010/06/27/postgresql-na-memoria-ram-in-memory/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/04/13/postgresql-82x-em-ubuntu-804/" title="Previous Post: PostgreSQL 8.2.x em Ubuntu > 8.04">&laquo; PostgreSQL 8.2.x em Ubuntu > 8.04</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2010/08/21/consegi-2010/" title="Next Post: CONSEGI 2010">CONSEGI 2010 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/10/novidades/">Novidades</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/10/database-refactoring/">Database Refactoring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/10/bad-smells-mal-cheiros-em-bancos-de/">Bad Smells (Mal Cheiros) Em Bancos De Dados</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/21/postgresql-93devel-nova-extensao/">PostgreSQL 9.3devel - Nova Extensão "Postgres_fdw"</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/postgresql-unlogged-tables-partitioning/">PostgreSQL + Unlogged Tables + Partitioning + Parallel Programming = ETL Reescrito Passando De ~8h Para ~25min De Execução</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/fabriziomello@gmail.com?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Fabrízio de Royes Mello -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

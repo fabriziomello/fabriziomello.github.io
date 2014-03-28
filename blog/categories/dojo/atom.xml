@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Dojo | Fabrízio de Royes Mello]]></title>
+  <link href="http://fabriziomello.github.io/blog/categories/dojo/atom.xml" rel="self"/>
+  <link href="http://fabriziomello.github.io/"/>
+  <updated>2014-03-28T12:48:20-03:00</updated>
+  <id>http://fabriziomello.github.io/</id>
+  <author>
+    <name><![CDATA[Fabrízio de Royes Mello]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[PGDay/RS 2011 Em Porto Alegre/RS]]></title>
+    <link href="http://fabriziomello.github.io/blog/2011/06/15/pgdayrs-2011-em-porto-alegrers/"/>
+    <updated>2011-06-15T00:00:00-03:00</updated>
+    <id>http://fabriziomello.github.io/blog/2011/06/15/pgdayrs-2011-em-porto-alegrers</id>
+    <content type="html"><![CDATA[<div class='post'>
+<b><br /></b><br /><b>O que é?</b><br /><br />Postgres ou <a href="http://www.postgresql.org/">PostgreSQL</a> é um projeto de Sistema Gerenciador de Banco de Dados open-source que foi iniciado em 1986, na Universidade de Berkeley, na Califórnia.<br /><br /><a href="http://www.postgresql.org.br/eventos/pgday">PGDay</a>, ou <a href="http://www.postgresql.org.br/eventos/pgday">Dia do Postgres</a>, é um evento não tão formal quanto ao <a href="http://pgbr.postgresql.org.br/">PGBR</a> (Conferência sobre PostgreSQL no Brasil) e de caráter regional, podendo ser realizado com poucas pessoas em qualquer/vários estados do País.<br /><br /><br /><br /><b>Quais são os objetivos?</b><br /><br />É uma chance para que acadêmicos, DBAs e desenvolvedores Brasileiros de PostgreSQL aprendam, troquem experiências, exponham casos de sucessos, desafios e fortifiquem sua rede de relacionamento profissional.<br /><br /><br /><b>Qual o público alvo?</b><br /><br />Dentre o público esperado estão:<br /><br /><ul><li>Administradores de Bancos de Dados;</li><li>Acadêmicos de Cursos Técnicos ou Universidades;</li><li>Desenvolvedores de Softwares;</li><li>Organizações governamentais;</li><li>Entusiastas de Software Livre;</li></ul><br /><br /><b>Data e Local</b><br /><br />O evento será dia <u>19 de Agosto de 2011</u>, no <u>Auditório do Bloco D da <b><a href="http://www.uniritter.edu.br/">Uniritter</a></b></u> localizado na Rua Orfanotrófio, 555, bairro Alto Teresópolis CEP: 90840-440 em Porto Alegre, RS.<br /><br /><br /><b>Inscrições, Palestras, Atividades e mais informações veja em:</b><br /><a href="http://www.postgresql.org.br/eventos/2011/pgday/rs">http://www.postgresql.org.br/eventos/2011/pgday/rs</a><br /><br /><br /><span class="Apple-style-span" style="color: #333333; font-family: Verdana, Arial, sans-serif; font-size: 13px; line-height: 16px;">Cordialmente,<br /><br />Fabrízio de Royes Mello<br />fabriziomello [at] gmail.com</span></div>
+
+]]></content>
+  </entry>
+  
+</feed>

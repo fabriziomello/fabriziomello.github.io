@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Targettrust | Fabrízio de Royes Mello]]></title>
+  <link href="http://fabriziomello.github.io/blog/categories/targettrust/atom.xml" rel="self"/>
+  <link href="http://fabriziomello.github.io/"/>
+  <updated>2014-03-28T12:48:20-03:00</updated>
+  <id>http://fabriziomello.github.io/</id>
+  <author>
+    <name><![CDATA[Fabrízio de Royes Mello]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[PGDay/RS 2011 - Targettrust Irá Sortear 1 (Um) Curso De PostgreSQL (20h)]]></title>
+    <link href="http://fabriziomello.github.io/blog/2011/07/28/pgdayrs-2011-targettrust-ira-sortear-1/"/>
+    <updated>2011-07-28T00:00:00-03:00</updated>
+    <id>http://fabriziomello.github.io/blog/2011/07/28/pgdayrs-2011-targettrust-ira-sortear-1</id>
+    <content type="html"><![CDATA[<div class='post'>
+Durante o <a href="http://www.postgresql.org.br/eventos/pgday/rs">PGDay/RS 2011</a> a <a href="http://www.targettrust.com.br/">T@rgetTrust</a>, empresa especializada em treinamentos, irá sortear 1 (um) curso, a escolha do sorteado, da sua <a href="http://www.targettrust.com.br/web/formacao/administrador-e-desenvolvedor-postgresql.aspx">Formação PostgreSQL</a>:<br /><br /><ul><li><a href="http://www.targettrust.com.br/web/curso/postgresql-fundamentos.aspx?formacao=administrador-e-desenvolvedor-postgresql">PostgreSQL Fundamentos</a></li><li><a href="http://www.targettrust.com.br/web/curso/postgresql-procedural.aspx?formacao=administrador-e-desenvolvedor-postgresql">PostgreSQL Procedural</a></li><li><a href="http://www.targettrust.com.br/web/curso/postgresql-administracao.aspx?formacao=administrador-e-desenvolvedor-postgresql">PostgreSQL Administração</a></li><li><a href="http://www.targettrust.com.br/web/curso/postgresql-administracao-avancada.aspx?formacao=administrador-e-desenvolvedor-postgresql">PostgreSQL Administração Avançada</a></li></ul><div>Mais informações acesse o site do evento em:</div><div><br /></div><div><a href="http://www.postgresql.org.br/eventos/pgday/rs">http://www.postgresql.org.br/eventos/pgday/rs</a></div><div><br /></div><div><span class="Apple-style-span" style="color: #333333; font-family: Verdana, Arial, sans-serif; font-size: 13px; line-height: 16px;">Cordialmente,<br /><br />Fabrízio de Royes Mello<br />fabriziomello [at] gmail.com</span></div></div>
+
+]]></content>
+  </entry>
+  
+</feed>

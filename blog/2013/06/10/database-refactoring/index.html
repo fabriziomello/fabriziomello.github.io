@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Database Refactoring - Fabrízio de Royes Mello</title>
+  <meta name="author" content="Fabrízio de Royes Mello">
+
+  
+  <meta name="description" content="ContextualizaçãoRefatoração&nbsp;de código&nbsp;(Code Refactoring) é uma disciplina/processo que consiste em melhorar a estrutura interna de um &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fabriziomello.github.io/blog/2013/06/10/database-refactoring">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Fabrízio de Royes Mello" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49388509-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Fabrízio de Royes Mello</a></h1>
+  
+    <h2>Blog sobre Tecnologia da Informação</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fabriziomello.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Database Refactoring</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-10T00:00:00-03:00" pubdate data-updated="true">Jun 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+<h4><b>Contextualização</b></h4>Refatoração&nbsp;de código&nbsp;(<i><a href="https://en.wikipedia.org/wiki/Code_refactoring">Code Refactoring</a></i>) é uma disciplina/processo que consiste em melhorar a estrutura interna de um software sem modificar seu comportamento externo, e uma Refatoração de Banco de Dados (<i><a href="https://en.wikipedia.org/wiki/Database_refactoring">Database Refactoring</a></i>) parte do mesmo princípio, porém além de manter o comportamento externo também deve manter a semântica da informação que ele mantém/armazena, e por esse motivo é considerada mais difícil.<br /><br />Um outro conceito que posso destacar a respeito de <i>Database Refactoring</i> é:<br /><i>&#8220;Mudança disciplinada na estrutura de uma base de dados que não altera sua semântica, porém melhora seu projeto e minimiza a introdução de dados inconsistentes&#8221;</i><br /><br />O ponto interessante deste último é o texto &#8221;<i>minimiza a introdução de dados inconsistentes</i>&#8221;, pois esse é o grande objetivo de realizarmos um <i>refactoring</i> na estrutura de um banco de dados, ou seja, melhorar o <i>desing</i>&nbsp;atual para melhorar a consistência dos dados e também a qualidade dos novos dados que serão adicionados ao seu banco de dados.<br /><br />E esta tarefa não é das mais simples, pois existe um fator preponderante no que diz respeito a dificuldade de execução deste tipo de <i>refactoring</i> que é o acoplamento, que será visto logo a seguir.<br /><h4><b>Acoplamento</b></h4><table cellpadding="0" cellspacing="0" class="tr-caption-container" style="float: right; text-align: center;"><tbody><tr><td style="text-align: center;"><span style="clear: left; margin-bottom: 1em; margin-left: auto; margin-right: auto;"><a href="http://www.agiledata.org/essays/databaseRefactoring.html#Figure1BestCaseScenario"><img border="0" height="200" src="http://3.bp.blogspot.com/--JcWNVQiwEw/UbVRwiLB_pI/AAAAAAAAAag/DKCZt5EndPI/s200/dataRefactoringBestCase.gif" width="175" /></a></span></td></tr><tr><td class="tr-caption" style="text-align: center;"><a href="http://www.agiledata.org/essays/databaseRefactoring.html#Figure1BestCaseScenario">Figura 1. Baixo Acoplamento</a></td></tr></tbody></table>É a medida de dependência entre dois elementos. Quanto mais acoplados dois elementos estiverem, maior a chance que a mudança em um implique na mudança em outro.<br /><br /><table cellpadding="0" cellspacing="0" class="tr-caption-container" style="float: left; text-align: left;"><tbody><tr><td style="text-align: center;"><span style="clear: left; margin-bottom: 1em; margin-left: auto; margin-right: auto;"><a href="http://www.agiledata.org/essays/databaseRefactoring.html#Figure2WorstCaseScenario"><img border="0" height="171" src="http://4.bp.blogspot.com/-G1MJ8-P0mPw/UbVRyTd6jFI/AAAAAAAAAas/LqwBNfBbVvc/s200/dataRefactoringWorstCase.gif" width="200" /></a></span></td></tr><tr><td class="tr-caption" style="text-align: center;"><a href="http://www.agiledata.org/essays/databaseRefactoring.html#Figure2WorstCaseScenario">Figura 2. Alto Acoplamento</a></td></tr></tbody></table>Simples assim, quanto mais o seu banco de dados estiver acoplado, ou seja, dependente de diversas aplicações externas, mais difícil será a aplicação de um <i>refactoring</i>.<br /><br />A Figura 1 demonstra um cenário &#8221;<i>Single-Database Application</i>&#8221; que é bem simplificado, onde a aplicação de um <i>refactoring</i>&nbsp;será mais tranquilo.<br /><br />Com certeza o cenário da Figura 2, o &#8221;<i>Multi-Database Application</i>&#8220;&nbsp;é o pior caso, pois exige muito cuidado e planejamento para execução do <i>refactoring</i>, então veremos a seguir uma sugestão de processo para execução.<br /><br /><h4><b>Processo de Refatoração</b></h4><table cellpadding="0" cellspacing="0" class="tr-caption-container" style="clear: right; float: right; margin-bottom: 1em; text-align: right;"><tbody><tr><td style="text-align: center;"><span style="clear: right; margin-bottom: 1em; margin-left: auto; margin-right: auto;"><a href="http://www.agiledata.org/essays/databaseRefactoring.html#Figure3Process"><img border="0" height="320" src="http://2.bp.blogspot.com/-GuIfZIWdI9M/UbVNf7VP42I/AAAAAAAAAaQ/IuYaQ9S4wPk/s320/databaseRefactoringProcess.gif" width="252" /></a></span></td></tr><tr><td class="tr-caption" style="text-align: center;">Figura 3. Processo de&nbsp;<i>Database Refactoring</i></td></tr></tbody></table>Um processo é um conjunto organizado de atividades com um objetivo em comum. Executar um&nbsp;<i>database refactoring</i>&nbsp;em um cenário &#8221;<i>Single-Database Application</i>&#8221; ou &#8221;<i>Multi-Application Database</i>&#8221; requer um processo, por mais simples que seja. A grande diferença na execução em ambos cenários é que no caso do &#8221;<i>Multi-Application Database</i>&#8221; o período de transição (mais abaixo falaremos) geralmente será mais longo.<br /><br />É bom sempre ter em mente que um <i>database refactoring</i>, como já vimos,&nbsp;não é uma atividade simples então caso seja identificada a real necessidade de refatorar um banco de dados então podemos usar o seguinte roteiro (processo) para se guiar:<br /><ul><li>Escolher o <i>refactoring</i> mais apropriado;</li><li>Depreciar o esquema original;</li><li>Testar antes, durante e após;</li><li>Modificar esquema;</li><li>Migrar os dados;</li><li>Modificar código externo;</li><li>Executar testes de regressão;</li><li>Versionar seu trabalho;</li><li>Anunciar o refactoring.</li></ul><div><table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="float: right; margin-left: 1em; text-align: right;"><tbody><tr><td style="text-align: center;"><a href="http://1.bp.blogspot.com/-jEsZQM4gxVU/UbVWvbD4CsI/AAAAAAAAAa8/7VDnxsuE6E0/s1600/process-refactoring-regra-geral.jpg" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" height="88" src="http://1.bp.blogspot.com/-jEsZQM4gxVU/UbVWvbD4CsI/AAAAAAAAAa8/7VDnxsuE6E0/s320/process-refactoring-regra-geral.jpg" width="320" /></a></td></tr><tr><td class="tr-caption" style="text-align: center;">Figura 4. Regra Geral Processo Refatoração</td></tr></tbody></table><br />Na Figura 4 é demonstrado um pequeno processo descrevendo um fluxo básico para aplicação de um <i>refactoring</i>.<br /><br />Atente bem para o &#8220;Período de Transição&#8221;, que é a fase mais importante, principalmente para cenários &#8221;<i>Multi-Database Application</i>&#8221; (Figura 2), onde você precisa ter em mente que não conseguirá realizar o <i>refactoring</i>&nbsp;e fazer o <i>deploy</i> em produção de todas as aplicações ao mesmo tempo. Na verdade você nem conseguirá alterar todas as aplicações ao mesmo tempo, principalmente se você tiver dependência de terceiros, então você precisará suportar o esquema original e o esquema resultante ao mesmo tempo, para somente quando todas aplicações estiverem suportando apenas o esquema resultante, ou novo esquema, você poderá aposentar de vez o antigo esquema e assim finalizar este período.<br /><br /><h4><b>Estratégias de <i>Database Refactorings</i></b></h4>Existem alguns pontos a considerar com estratégias para adoção de um <i>database refactoring</i>:<br /><br /><ul><li>Pequenas mudanças são mais fáceis de aplicar;</li><li>Identifique unicamente cada <i>refactoring</i>;</li><li>Implemente uma grande mudança realizando várias pequenas mudanças;</li><li>Tenha uma tabela de configuração/versionamento do seu banco de dados;</li><li>Priorize <i>triggers</i>&nbsp;ao invés de <i>views</i>&nbsp;ou sincronizações em lote;</li><li>Escolha um período de transição suficiente para realizar as mudanças;</li><li>Simplifique sua estratégia de controle de versão de banco de dados;</li><li>Simplifique negociações com outros times;</li><li>Encapsule acesso ao banco de dados;</li><li>Habilite-se a montar facilmente um ambiente de banco de dados;</li><li>Não duplique SQL;</li><li>Coloque os ativos de banco de dados sobre controle de mudanças;</li><li>Seja cuidadoso com políticas.</li></ul><div>Os items acima mostram apenas algumas sugestões, em forma de &#8220;lições aprendidas&#8221;, de algumas estratégias que você pode considerar quando tiver a necessidade de realizar um <i>refactoring</i>.</div><div>Para apoiar essas estratégias existe um catálogo que descrevem diversos tipos de <i>refactorings</i>&nbsp;em bancos de dados&nbsp;e exemplos de uso, que veremos a seguir.</div><div><br /></div><h4><b><a href="http://www.agiledata.org/essays/databaseRefactoringCatalog.html">Catálogo de&nbsp;<i>Database Refactorings</i></a></b></h4><div>Este catálogo é dividido em algumas categorias:<br /><br /><ul><li><i><a href="http://www.agiledata.org/essays/databaseRefactoringCatalogStructural.html">Structural</a></i>: são mudanças na estrutura do banco de dados (tabelas, colunas, visões, etc).</li><li><i><a href="http://www.agiledata.org/essays/databaseRefactoringCatalogDataQuality.html">Data Quality</a></i>: são mudanças que melhoram a qualidade das informações contidas em um banco de dados.</li><li><i><a href="http://www.agiledata.org/essays/databaseRefactoringCatalogReferentialIntegrity.html">Referential Integrity</a></i>: são mudanças que asseguram que uma linha referenciada exista em outra relação e/ou assegura que uma linha que não é mais necessária seja removida apropriadamente.</li><li><i><a href="http://www.agiledata.org/essays/databaseRefactoringCatalogArchitectural.html">Architectural</a></i>: são mudanças que melhoram a maneira que programas externos interagem com a base de dados.</li><li><i><a href="http://www.agiledata.org/essays/databaseRefactoringCatalogMethod.html">Method</a></i>: são mudanças que melhoram a qualidade de uma Procedure um Função.</li><li><i><a href="http://www.agiledata.org/essays/databaseRefactoringCatalogTransformations.html">Transformations</a></i>: mudanças que alteram a semântica do esquema do banco pela adição de novas funcionalidades.</li></ul><br /><div>No meu <a href="https://github.com/fabriziomello/database_refactoring">github</a> é possível encontrar exemplos práticos de aplicação passo-a-passo de um refactoring em um <a href="https://github.com/fabriziomello/database_refactoring/blob/master/model/01_modelo_inicial.png">modelo inicial</a>, passando por um <a href="https://github.com/fabriziomello/database_refactoring/blob/master/model/02_modelo_fks.png">período de transição</a> e chegando ao <a href="https://github.com/fabriziomello/database_refactoring/blob/master/model/03_modelo_city.png">modelo final</a>.&nbsp;</div><div><br /></div><div><h4>Considerações Finais</h4>Devemos levar em consideração que apesar destas técnicas serem direcionadas para refatoração, ou seja, mudar estrutura sem mudar sua semântica, as mesmas podem e devem ser utilizadas para evolução da sua aplicação, ou seja, se você precisa construir uma nova <i>feature</i>&nbsp;em sua aplicação que está em produção, você poderá recorrer das práticas aqui apresentadas para evoluir seu esquema de forma mais consistente e segura.<br /><br />Baseado no exposto podemos facilmente responder a pergunta &#8220;Por quê Refatorar?&#8221;:<br /><br /><ul><li>aceitar mudança de escopo;</li><li>fornecer feedback rápido;</li><li>melhoria contínua;</li><li>aumentar simplicidade para facilitar entendimento;</li><li>tornar os modelos mais próximos do mundo real;</li><li>termos modelos simples para facilitar:</li><ul><li>manutenção e</li><li>evolução da aplicação</li></ul></ul>E para refatorarmos precisamos ter conhecimento, disciplina, simplicidade, bom senso e persistência, sem contar no ponto fundamental que é organização.<br /><br /><h4>Referências</h4><ul><li>Livros:&nbsp;</li><ul><li><a href="http://www.ambysoft.com/books/refactoringDatabases.html">Refactoring Databases</a> (Scott W. Ambler e Pramod J. Sadalage)</li><li><a href="http://www.ambysoft.com/books/agileDatabaseTechniques.html">Agile Database Techniques</a> (Scott W. Ambler)</li><li><a href="http://martinfowler.com/books/refactoring.html">Refactoring</a> (Martin Fowler)</li><li><a href="http://www.ambysoft.com/books/agileModeling.html">Agile Modeling</a> (Scott W. Ambler)&nbsp;</li></ul><li>Links:</li><ul><li><a href="http://www.agiledata.org/">http://www.agiledata.org</a></li><li><a href="http://www.databaserefactoring.org/">http://www.databaserefactoring.org</a></li><li><a href="http://visaoagil.wordpress.com/">http://visaoagil.wordpress.com</a></li><li><a href="http://www.refactoring.com/">http://www.refactoring.com</a></li><li><a href="http://www.postgresql.org/">http://www.postgresql.org</a></li><li><a href="http://www.epictest.org/">http://www.epictest.org</a></li><li><a href="http://www.slideshare.net/diogobiazus/testes-unitarios-com-postgre-sql">http://www.slideshare.net/diogobiazus/testes-unitarios-com-postgre-sql</a></li></ul><li>Slides</li><ul><li><a href="http://www.slideshare.net/fabriziomello/tag/refactoring">http://www.slideshare.net/fabriziomello/tag/refactoring</a></li><li><a href="http://www.slideshare.net/antonkeks/database-refactoring">http://www.slideshare.net/antonkeks/database-refactoring</a></li></ul></ul></div><ul></ul></div></div><div class="separator" style="clear: both; text-align: center;"></div></div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Fabrízio de Royes Mello</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-10T00:00:00-03:00" pubdate data-updated="true">Jun 10<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/database-refactoring/'>database refactoring</a>, <a class='category' href='/blog/categories/postgresql/'>postgresql</a>, <a class='category' href='/blog/categories/refactoring/'>refactoring</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fabriziomello.github.io/blog/2013/06/10/database-refactoring/" data-via="fabriziomello" data-counturl="http://fabriziomello.github.io/blog/2013/06/10/database-refactoring/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/06/10/bad-smells-mal-cheiros-em-bancos-de/" title="Previous Post: Bad Smells (Mal cheiros) em Bancos de Dados">&laquo; Bad Smells (Mal cheiros) em Bancos de Dados</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/03/10/novidades/" title="Next Post: Novidades">Novidades &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/10/novidades/">Novidades</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/10/database-refactoring/">Database Refactoring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/10/bad-smells-mal-cheiros-em-bancos-de/">Bad Smells (Mal Cheiros) Em Bancos De Dados</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/21/postgresql-93devel-nova-extensao/">PostgreSQL 9.3devel - Nova Extensão "Postgres_fdw"</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/postgresql-unlogged-tables-partitioning/">PostgreSQL + Unlogged Tables + Partitioning + Parallel Programming = ETL Reescrito Passando De ~8h Para ~25min De Execução</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/fabriziomello@gmail.com?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Fabrízio de Royes Mello -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

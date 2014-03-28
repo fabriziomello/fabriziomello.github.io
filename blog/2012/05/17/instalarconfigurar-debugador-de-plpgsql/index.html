@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Instalar/Configurar "Debugador" De PL/pgSQL (Pldebugger) No PostgreSQL 9.1 Usando Ubuntu - Fabrízio de Royes Mello</title>
+  <meta name="author" content="Fabrízio de Royes Mello">
+
+  
+  <meta name="description" content="O passo-a-passo abaixo foi realizado no Ubuntu 10.04LTS com o PostgreSQL 9.1 instalado via ppa do Martin Pitti, mas creio que pode ser executado &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fabriziomello.github.io/blog/2012/05/17/instalarconfigurar-debugador-de-plpgsql">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Fabrízio de Royes Mello" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49388509-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Fabrízio de Royes Mello</a></h1>
+  
+    <h2>Blog sobre Tecnologia da Informação</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fabriziomello.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Instalar/Configurar "Debugador" De PL/pgSQL (Pldebugger) No PostgreSQL 9.1 Usando Ubuntu</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-17T00:00:00-03:00" pubdate data-updated="true">May 17<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+<br />O passo-a-passo abaixo foi realizado no Ubuntu 10.04LTS com o PostgreSQL 9.1 instalado via ppa do Martin Pitti, mas creio que pode ser executado tranquilamente utilizando a última versão LTS do Ubuntu, a 12.04LTS.<br /><br />1) Download dos fontes do PostgreSQL<br /><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">$ wget -c http://ftp.postgresql.org/pub/source/v9.1.3/postgresql-9.1.3.tar.bz2</span><br /><br /><br />2) Precisamos instalar ferramentas necessárias para compilação da extensão<br /><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">$ sudo apt-get update</span><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">$ sudo apt-get install build-essential libreadline-dev zlib1g-dev flex bison libssl-dev git-core</span><br /><br /><br />3) Compilar o PostgreSQL e a extensao pldebugger<br /><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">$ tar jxvf postgresql-9.1.3.tar.bz2</span><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">$ cd postgresql-9.1.3</span><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">$ ./configure &#8211;prefix=/usr &#8211;includedir=/usr/include &#8211;mandir=/usr/share/man &#8211;infodir=/usr/share/info &#8211;sysconfdir=/etc &#8211;localstatedir=/var &#8211;libexecdir=/usr/lib/postgresql-9.1 &#8211;srcdir=. &#8211;mandir=/usr/share/postgresql/9.1/man &#8211;docdir=/usr/share/doc/postgresql-doc-9.1 &#8211;datadir=/usr/share/postgresql/9.1 &#8211;bindir=/usr/lib/postgresql/9.1/bin &#8211;libdir=/usr/lib/postgresql/9.1/lib &#8211;includedir=/usr/include/postgresql/ &#8211;enable-integer-datetimes &#8211;with-openssl</span><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">$ make</span><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">$ cd contrib</span><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">$ git clone git://git.postgresql.org/git/pldebugger.git</span><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">$ cd pldebugger</span><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">$ make</span><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">$ sudo make install</span><br /><br />Obs: lembrando que, apesar de extenso, o &#8220;./configure&#8221; deve ser todo escrito na mesma linha<br /><br />4) Após compilar e instalar a extensao pldebugger precisamos ativa-a no PostgreSQL<br /><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">$ sudo vim /etc/postgresql/9.1/main/postgresql.conf</span><br /><br />alterar<br />&nbsp;<br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">&nbsp; #shared_preload_libraries = &#8221;</span><br /><br />para<br />&nbsp;<br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">&nbsp; shared_preload_libraries = &#8216;$libdir/plugin_debugger&#8217;</span><br />&nbsp;<br /><br />5) Reiniciar PostgreSQL<br /><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">$ sudo /etc/init.d/postgresql restart 9.1</span><br /><br /><br />6) Criar a EXTENSAO &#8220;pldbgpapi&#8221; na(s) base(s) de dados que deseja fazer debug de pls<br /><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">$ psql -U postgres bdteste</span><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">psql (9.1.3)</span><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">Digite &#8220;help&#8221; para ajuda.</span><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;"><br /></span><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">bdteste=# CREATE EXTENSION pldbgapi;</span><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">CREATE EXTENSION</span><br /><span style="font-family: 'Courier New', Courier, monospace; font-size: x-small;">bdteste=#</span><br /><br /><br />7) Pronto, agora vc pode usar o PGAdmin para &#8220;debugar&#8221; suas funções PL/pgSQL<br /><br /><br /><br />&#8212;<br />Fabrízio Mello<br />fabriziomello [at] gmail.com<br /><div><br /></div><br /></div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Fabrízio de Royes Mello</div>
+<div class='content'>
+Olá Fábio,<br /><br />Minha experiência com PostgreSQL nessa plataforma (Windows) é limitada, mas parece que nesse seu caso o problema é no seu &quot;pg_hba.conf&quot; (Host Based Authentication), ou seja, o arquivo de configuração das permissões para autenticação dos usuários na base de dados. Tente editá-lo e alterar os métodos de autenticação das regras (última coluna) para &quot;trust&quot;, depois faça um reload no processo do PostgreSQL e tente novamente.<br /><br />Também gostaria de comentar que esse não é o melhor local para vc tirar esse tipo de dúvida, então o convido para assinar nossa lista de discussão [1] da Comunidade Brasileira de PostgreSQL, onde temos muitas pessoas observando as dúvidas e ajudando. Faça um teste, se cadastre lá e envie um email com essa dúvida e vc verá como será.<br /><br />Abraços,<br /><br />[1] https://listas.postgresql.org.br/cgi-bin/mailman/listinfo/pgbr-geral<br /><br />&#8211;<br />Fabrízio de Royes Mello<br />Comunidade Brasileira de PostgreSQL</div>
+</div>
+<div class='comment'>
+<div class='author'>Fabio</div>
+<div class='content'>
+Olá Fabrízio !! Estou com um problema no postgresql e estou na minha primeira instalação para começar a aprender&#8230;Na hora que estou criando o banco pela linha de comando ele pede senha e eu digito, mas apareçe uma mensagem tipo &quot;postgres não conseguiu conectar com o database erro fatal, falha na autenticação da senha&quot;, no entanto já troquei a senha do usuario postgres diversas vezes e o erro persiste. Estou usando a ferramenta no windows seven 64bits(já tentei no XP tambem)&#8230; Poderia me ajudar? Desde já muito obrigado e valeu pela atenção!!!  </div>
+</div>
+</div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Fabrízio de Royes Mello</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-17T00:00:00-03:00" pubdate data-updated="true">May 17<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fabriziomello.github.io/blog/2012/05/17/instalarconfigurar-debugador-de-plpgsql/" data-via="fabriziomello" data-counturl="http://fabriziomello.github.io/blog/2012/05/17/instalarconfigurar-debugador-de-plpgsql/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/10/11/video-com-atividade-do-repositorio-git/" title="Previous Post: Vídeo com atividade do repositório GIT do PostgreSQL nos últimos meses">&laquo; Vídeo com atividade do repositório GIT do PostgreSQL nos últimos meses</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/10/04/patch-sobre-create-schema-if-not-exists/" title="Next Post: Patch sobre CREATE SCHEMA IF NOT EXISTS aceito para o PostgreSQL 9.3devel">Patch sobre CREATE SCHEMA IF NOT EXISTS aceito para o PostgreSQL 9.3devel &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/10/novidades/">Novidades</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/10/database-refactoring/">Database Refactoring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/10/bad-smells-mal-cheiros-em-bancos-de/">Bad Smells (Mal Cheiros) Em Bancos De Dados</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/21/postgresql-93devel-nova-extensao/">PostgreSQL 9.3devel - Nova Extensão "Postgres_fdw"</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/postgresql-unlogged-tables-partitioning/">PostgreSQL + Unlogged Tables + Partitioning + Parallel Programming = ETL Reescrito Passando De ~8h Para ~25min De Execução</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/fabriziomello@gmail.com?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Fabrízio de Royes Mello -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Bad Smells (Mal Cheiros) Em Bancos De Dados - Fabrízio de Royes Mello</title>
+  <meta name="author" content="Fabrízio de Royes Mello">
+
+  
+  <meta name="description" content="Uma estrutura de um banco de dados, diferentemente da estrutura de um software, tende a deteriorar naturalmente com o passar do tempo. Dentre várias &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fabriziomello.github.io/blog/2013/06/10/bad-smells-mal-cheiros-em-bancos-de">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Fabrízio de Royes Mello" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49388509-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Fabrízio de Royes Mello</a></h1>
+  
+    <h2>Blog sobre Tecnologia da Informação</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fabriziomello.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Bad Smells (Mal Cheiros) Em Bancos De Dados</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-10T00:00:00-03:00" pubdate data-updated="true">Jun 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+Uma estrutura de um banco de dados, diferentemente da estrutura de um software, tende a deteriorar naturalmente com o passar do tempo. Dentre várias causas de deterioração podemos citar o crescimento progressivo do volume de dados devido ao aumento natural de usuários que o utilizam e também ao seu próprio tempo de uso, tornando um modelo de dados que no início era eficiente para solução proposta em um modelo ineficiente e defasado.<br /><br />Essa deterioração natural aliada a mudanças em requisitos de negócio exigem modificações e refatorações tanto no software que os implementa quanto em seus bancos de dados. Entretanto a <a href="http://fabriziomello.blogspot.com.br/2013/06/database-refactoring.html">refatoração de um banco de dados</a> é mais complexa que a de um software devido aos seguintes motivos: (i) além de manter comportamento também é necessário manter as informações (dados) e (ii) acoplamento com diversas origens (outras aplicações, <i>frameworks</i>, integrações, etc).<br /><br />Devido a essas dificuldades a evolução de uma estrutura de banco de dados torna-se um desafio, ocorrendo assim um fenômeno conhecido como <i>Bad Smells</i>&nbsp;(mal cheiros), da mesma forma que ocorre com o código de um software. Em software um <a href="http://martinfowler.com/bliki/CodeSmell.html"><i>code smell</i>&nbsp;(<i>bad smell</i>)</a> é uma categoria comum de problema no código fonte que indica a necessidade de refatoração, e o mesmo ocorre com bancos de dados, onde são chamados <i><a href="http://www.agiledata.org/essays/databaseRefactoringSmells.html">database smells</a></i>.<br /><br />Abaixo segue uma lista de alguns <i><a href="http://www.agiledata.org/essays/databaseRefactoringSmells.html">database smells</a></i>:<br /><ul><li><i>Multi-purpose column</i> (coluna com mais de uma função)</li><li><i>Multi-purpose table</i> (tabela com mais de uma função)</li><li><i>Redundant data</i> (dados redundantes/repetidos)</li><li><i>Tables with many columns</i> (tabelas com muitas colunas)</li><li><i>&#8220;Smart&#8221; columns</i> (colunas &#8220;espertas&#8221;)</li><li><i>Lack of constraints</i> (falta de restrições)</li><li><i>Fear of change</i> (medo da mudança)</li></ul><div>Dentre os <i>database smells</i>&nbsp;citados acima, devemos ter atenção especial ao &#8221;<i>Fear of change</i>&#8221;, pois pode ser considerado o pior de todos, pois:</div><div><ul><li>inibe a inovação,&nbsp;</li><li>reduz a efetividade,&nbsp;</li><li>produz ainda mais bagunça e&nbsp;</li><li>ao longo do tempo a situação fica cada vez pior.&nbsp;</li></ul></div><div>Lembra do valor &#8221;<a href="http://desenvolvimentoagil.com.br/xp/valores/coragem/">Coragem</a>&#8221; do <a href="http://desenvolvimentoagil.com.br/xp/">XP</a> (eXtreme Programming)? Mudança é algo que deve ser considerado natural e irá acontecer em projetos de software, isso é um fato, não podemos fugir disso, então precisamos das práticas e ferramentas adequadas para que a mudança não seja um entrave na evolução do seu projeto, e sim algo natural e, de certa forma, trivial para sua equipe, e o mesmo deve ocorrer com seu banco de dados.</div><div><br /></div><div>Esse post é apenas uma introdução a este assunto pouco explorado e que tenho como proposta para conclusão de <a href="http://www.uniritter.edu.br/pos/tecnologia/metodos_ageis/">Pós-Graduação em Tecnologias Aplicadas a Sistemas de Informações com Métodos Ágeis</a> que estou realizando na&nbsp;<a href="http://www.uniritter.edu.br/">http://www.uniritter.edu.br</a>.</div><div><br /></div><div>A idéia é montar uma <a href="http://pt.wikipedia.org/wiki/Taxonomia">taxonomia</a> de <i>Database Smells</i> através de um catálogo, inclusive sugerindo os <i><a href="http://fabriziomello.blogspot.com.br/2013/06/database-refactoring.html">Database Refactoring</a></i> que podem ser utilizados em sua solução, e futuramente, quem sabe em um futuro trabalho de Mestrado fazer um paralelo dos <i>Database Smells</i>&nbsp;com <i>Code Smells</i>, principalmente se os mal cheiros em códigos podem refletir mal cheiros no seu banco de dados. ;-)</div></div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Gabriel Prestes</div>
+<div class='content'>
+Excelente o post Fabrízio, pela introdução ao assunto, aguardo novos posts. </div>
+</div>
+<div class='comment'>
+<div class='author'>Fabrízio de Royes Mello</div>
+<div class='content'>
+O formato do trabalho será de um artigo científico e não de um TCC, porque é para conclusão de uma Pós-Graduação e não Graduação.<br /><br />Mas com certeza vou compartilhar quando estiver pronto.<br /><br />Obrigado.</div>
+</div>
+<div class='comment'>
+<div class='author'>Webeople</div>
+<div class='content'>
+Bom trabalho, meu caro.<br /><br />Quando o tcc estiver pronto, compartilha aí. Gostaria muito de ler.<br /><br />Abs,</div>
+</div>
+<div class='comment'>
+<div class='author'>Eduardo A. Fiorezi</div>
+<div class='content'>
+Muito bom Fabrízio. Ainda não tive a oportunidade de ler o Database Refactoring, mas na época que foi lançado eu estava escrevendo meu tcc.. Ótimo artigo. Abraços</div>
+</div>
+</div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Fabrízio de Royes Mello</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-10T00:00:00-03:00" pubdate data-updated="true">Jun 10<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/bad-smell/'>bad smell</a>, <a class='category' href='/blog/categories/code-smell/'>code smell</a>, <a class='category' href='/blog/categories/database-refactoring/'>database refactoring</a>, <a class='category' href='/blog/categories/database-smell/'>database smell</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fabriziomello.github.io/blog/2013/06/10/bad-smells-mal-cheiros-em-bancos-de/" data-via="fabriziomello" data-counturl="http://fabriziomello.github.io/blog/2013/06/10/bad-smells-mal-cheiros-em-bancos-de/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/02/21/postgresql-93devel-nova-extensao/" title="Previous Post: PostgreSQL 9.3devel - Nova extensão "postgres_fdw"">&laquo; PostgreSQL 9.3devel - Nova extensão "postgres_fdw"</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/06/10/database-refactoring/" title="Next Post: Database Refactoring">Database Refactoring &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/10/novidades/">Novidades</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/10/database-refactoring/">Database Refactoring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/10/bad-smells-mal-cheiros-em-bancos-de/">Bad Smells (Mal Cheiros) Em Bancos De Dados</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/21/postgresql-93devel-nova-extensao/">PostgreSQL 9.3devel - Nova Extensão "Postgres_fdw"</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/postgresql-unlogged-tables-partitioning/">PostgreSQL + Unlogged Tables + Partitioning + Parallel Programming = ETL Reescrito Passando De ~8h Para ~25min De Execução</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/fabriziomello@gmail.com?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Fabrízio de Royes Mello -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

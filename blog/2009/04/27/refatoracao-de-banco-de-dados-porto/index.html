@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Refatoração De Banco De Dados - Porto Alegre AgileWeekend 2009 - Fabrízio de Royes Mello</title>
+  <meta name="author" content="Fabrízio de Royes Mello">
+
+  
+  <meta name="description" content="Esse final de semana (25 e 26 de abril de 2009) tive a oportunidade de participar, como palestrante, do Porto Alegre AgileWeekend 2009 [1], &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fabriziomello.github.io/blog/2009/04/27/refatoracao-de-banco-de-dados-porto">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Fabrízio de Royes Mello" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49388509-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Fabrízio de Royes Mello</a></h1>
+  
+    <h2>Blog sobre Tecnologia da Informação</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fabriziomello.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Refatoração De Banco De Dados - Porto Alegre AgileWeekend 2009</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-27T00:00:00-03:00" pubdate data-updated="true">Apr 27<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+Esse final de semana (25 e 26 de abril de 2009) tive a oportunidade de participar, como palestrante, do <a href="http://agileweekend.guma-rs.org/">Porto Alegre AgileWeekend 2009 [1]</a>, discursando  sobre Refatoração de Banco de Dados (Database Refactoring) <a href="http://www.slideshare.net/fabriziomello/refatorao-banco-de-dados-agileweekend2009">[2]</a> utilizando o PostgreSQL.<br /><br />O evento contou com conteúdo de alto nível, demonstrando cases de sucesso na  aplicação de métodos e práticas ágeis no desenvolvimento de software  tais como:<br /><br />- Lean Software Development<br />- eXtreme Programming<br />- Scrum<br />- FDD (Feature-Driven Development), TDD (Test-Driven Developmento, BDD  (Behavior-Driven Development)<br />- etc&#8230;<br /><br />Além do alto nível dos conteúdos apresentados também não posso deixar de mencionar a alta qualidade da organização do evento que beirou a &#8220;perfeição&#8221; (e sem exageros&#8230; mas isso não seria resultado da aplicação prática de algum Métodos Ágil por parte de seus organizadores???).<br /><br />O que pude perceber ao longo de todas exposições, é que alguns dos objetivos desses &#8220;Métodos Ágeis&#8221; são a Satisfação do  Cliente e Qualidade do Produto entregue (aquilo que buscamos  constantemente).<br /><br />Atualmente existem diversas empresas (inclusive de nível global)  investindo em Métodos Ágeis, tais como:<br />- Borland<br />- Adobe<br />- Toyota (Criadora do Lean Software Development, que pode-se dizer que é  &#8220;pai&#8221; de todos métodos ágeis)<br />- Globo.com<br />- etc&#8230;<br /><br />Segundo um representante da <a href="http://www.rs.sucesu.org.br/">SUCESU-RS [4]</a>:  &#8220;Aqui no nosso estado os CIOs  das 40 maiores empresas estão olhando com &#8220;muito carinho&#8221; para os  métodos ágeis&#8221;. Será que isso não pode-se caracterizar uma tendência de mercado????<br /><br /><br />Outro ponto positivo é que o evento foi bem diversificado, demonstrando além  de questões técnicas a respeito de desenvolvimento de software, muita  informação Gerencial, no que diz respeito aos objetivos empresariais&#8230;  as práticas para maximizar resultados e eliminar desperdícios, dentre  outros.<br /><br /><br />Em uma palestra sobre SCRUM foi comentada a utilização de práticas ágeis aplicadas ao  setor de Suporte de uma empresa de desenvolvimento de software&#8230; em  outra o pessoal está utilizando essa &#8220;cultura&#8221; nos processos  administrativos da empresa&#8230; então a &#8220;Cultura Ágil&#8221; vai além do  desenvolvimento de software?!?!?!  Não surpreendam-se de em algum tempo ouvirmos coisas do tipo &#8220;Refatorar Processos de Negócio!&#8221;&#8230; &#8220;Refatorando as Finanças de sua Empresa&#8221;&#8230; (adoro refatoração&#8230; hehehehe)<br /><br /><br />Abaixo seguem alguns links com informações sobre o evento, a minha  palestra e algumas fotos:<br /><br />[1] Site do Evento<br /><a class="moz-txt-link-freetext" href="http://agileweekend.guma-rs.org/">http://agileweekend.guma-rs.org/</a><br /><br />[2] Slides da minha Palestra<br /><a class="moz-txt-link-freetext" href="http://www.slideshare.net/fabriziomello/refatorao-banco-de-dados-agileweekend2009">http://www.slideshare.net/fabriziomello/refatorao-banco-de-dados-agileweekend2009</a><br /><br />[3] Fotos do Evento<br /><a class="moz-txt-link-freetext" href="http://picasaweb.google.com/fabriziomello/Agileweekend2009">http://picasaweb.google.com/fabriziomello/Agileweekend2009</a><br /><br />[4] Site SUCESU-RS<br /><a class="moz-txt-link-freetext" href="http://www.rs.sucesu.org.br/">http://www.rs.sucesu.org.br/</a><br /><br />Cordialmente,<br /><br />Fabrízio de Royes Mello<br />fabriziomello [at] gmail.com</div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Luiz Cláudio Parzianello</div>
+<div class='content'>
+Grande Fabrizio! Obrigado por ter acreditado em nosso sonho e ter participado do evento! Gostaria de acrescentar uma informação ao teu post: o representante da Sucesu-RS era o Eduardo Arruda, Presidente da entidade também CIO do Tribunal de Justiça do Estado do Rio Grande do Sul. Outra coisa &#8230; coisa da idéia da refatoração! Vamos refatorar diariamente nossas vidas!!! Hehehe!!!! Abraços!</div>
+</div>
+</div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Fabrízio de Royes Mello</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-04-27T00:00:00-03:00" pubdate data-updated="true">Apr 27<span>th</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/database-refactoring/'>database refactoring</a>, <a class='category' href='/blog/categories/postgresql/'>postgresql</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fabriziomello.github.io/blog/2009/04/27/refatoracao-de-banco-de-dados-porto/" data-via="fabriziomello" data-counturl="http://fabriziomello.github.io/blog/2009/04/27/refatoracao-de-banco-de-dados-porto/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/01/10/postgresql-recuperao-de-erro-failed-to/" title="Previous Post: PostgreSQL - Recuperação de Erro “failed to re-find parent key” no start do processo">&laquo; PostgreSQL - Recuperação de Erro “failed to re-find parent key” no start do processo</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/06/09/pgcon-brasil-2009-chamada-de-trabalhos/" title="Next Post: PGCon Brasil 2009 - Chamada de Trabalhos">PGCon Brasil 2009 - Chamada de Trabalhos &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/10/novidades/">Novidades</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/10/database-refactoring/">Database Refactoring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/10/bad-smells-mal-cheiros-em-bancos-de/">Bad Smells (Mal Cheiros) Em Bancos De Dados</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/21/postgresql-93devel-nova-extensao/">PostgreSQL 9.3devel - Nova Extensão "Postgres_fdw"</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/20/postgresql-unlogged-tables-partitioning/">PostgreSQL + Unlogged Tables + Partitioning + Parallel Programming = ETL Reescrito Passando De ~8h Para ~25min De Execução</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/fabriziomello@gmail.com?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Fabrízio de Royes Mello -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
