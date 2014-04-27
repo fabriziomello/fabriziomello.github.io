@@ -9,7 +9,7 @@
   <meta name="author" content="Fabrízio de Royes Mello">
 
   
-  <meta name="description" content="Em breve teremos novidades por aqui, pois começarei um trabalho de tradução dos posts do blog http://www.depesz.com/ do amigo Hubert Depesz &hellip;">
+  <meta name="description" content="Amigos, gostaria de compartilhar um pouco de minha emoção e alegria, pois minha proposta de projeto foi aceita para o &ldquo;Google Summer of Code &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,52 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/26/projeto-aceito-no-google-summer-of-code-2014-gsoc2014/">Projeto Aceito No Google Summer of Code 2014 (GSoC2014)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-26T12:24:51-03:00" pubdate data-updated="true">Apr 26<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Amigos, gostaria de compartilhar um pouco de minha emoção e alegria, pois <a href="http://www.google-melange.com/gsoc/project/details/google/gsoc2014/fabriziomello/5738600293466112">minha proposta de projeto</a> foi aceita para o <a href="http://www.google-melange.com/gsoc/homepage/google/gsoc2014">&ldquo;Google Summer of Code 2014&rdquo;</a>.</p>
+
+<p>Nos próximos meses estarei desenvolvendo uma nova funcionalidade para o <a href="http://www.postgresql.org">PostgreSQL</a> financiado pelo <a href="http://www.google-melange.com/gsoc/homepage/google/gsoc2014">Google</a>, como projeto de pesquisa do curso de Pós-Graduação em <a href="http://www.uniritter.edu.br/pos/tecnologia/metodos_ageis">Tecnologias Aplicadas a Sistemas de Informação com Métodos Ágeis</a> pela <a href="http://www.uniritter.edu.br">Uniritter Porto Alegre/RS</a>.</p>
+
+<p>O principal objetivo deste projeto é permitir que <a href="http://www.postgresql.org/docs/current/static/sql-createtable.html">&ldquo;unlogged tables&rdquo;</a> (tabelas que não geram registros no <a href="http://www.postgresql.org/docs/current/static/wal-intro.html">WAL</a>) sejam transformadas em tabelas regulares (que geram registros no WAL) e vice-versa. Para que isso aconteça será adicionado mais duas cláusulas ao comando sql &ldquo;ALTER TABLE&rdquo;:</p>
+
+<pre><code>ALTER TABLE table_name SET LOGGED;
+ALTER TABLE table_name SET UNLOGGED;
+</code></pre>
+
+<p>Quem tiver interesse em acompanhar a realização do projeto pode visitar a <a href="http://wiki.postgresql.org/wiki/Allow_an_unlogged_table_to_be_changed_to_logged_GSoC_2014">página do projeto no Wiki da comunidade PostgreSQL</a> e também o <a href="https://github.com/fabriziomello/postgres/tree/gsoc2014_alter_table_set_logged">código fonte no github</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -468,43 +514,6 @@ preciso de sua ajuda, meu banco SQL caiu e não volta, depois d euma queda de en
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/08/31/pgbr2011-chamada-de-trabalhos/">PGBR2011 - Chamada De Trabalhos</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-08-31T00:00:00-03:00" pubdate data-updated="true">Aug 31<span>st</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-Pessoal,<br /><br />A <a href="http://pgbr.postgresql.org.br/2011/chamada.php">chamada de trabalhos do PGBR2011</a> está aberta.<br /><br />Vejam mais informações interessantes de como participar no excelente <a href="http://www.midstorm.org/~telles/2011/08/14/pgbr2011-chamada-de-trabalhos/">post do Fábio Telles</a>.<br /><br />&#8212;<br />Fabrízio Mello<br />fabriziomello [at] gmail.com</div>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -520,6 +529,10 @@ Pessoal,<br /><br />A <a href="http://pgbr.postgresql.org.br/2011/chamada.php">c
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/04/26/projeto-aceito-no-google-summer-of-code-2014-gsoc2014/">Projeto Aceito No Google Summer of Code 2014 (GSoC2014)</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/03/10/novidades/">Novidades</a>
       </li>
     
@@ -533,10 +546,6 @@ Pessoal,<br /><br />A <a href="http://pgbr.postgresql.org.br/2011/chamada.php">c
     
       <li class="post">
         <a href="/blog/2013/02/21/postgresql-93devel-nova-extensao/">PostgreSQL 9.3devel - Nova Extensão &#8220;Postgres_fdw&#8221;</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/20/postgresql-unlogged-tables-partitioning/">PostgreSQL + Unlogged Tables + Partitioning + Parallel Programming = ETL Reescrito Passando De ~8h Para ~25min De Execução</a>
       </li>
     
   </ul>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Unlogged | Fabrízio de Royes Mello]]></title>
+  <link href="http://fabriziomello.github.io/blog/categories/unlogged/atom.xml" rel="self"/>
+  <link href="http://fabriziomello.github.io/"/>
+  <updated>2014-04-27T00:54:13-03:00</updated>
+  <id>http://fabriziomello.github.io/</id>
+  <author>
+    <name><![CDATA[Fabrízio de Royes Mello]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Projeto Aceito No Google Summer of Code 2014 (GSoC2014)]]></title>
+    <link href="http://fabriziomello.github.io/blog/2014/04/26/projeto-aceito-no-google-summer-of-code-2014-gsoc2014/"/>
+    <updated>2014-04-26T12:24:51-03:00</updated>
+    <id>http://fabriziomello.github.io/blog/2014/04/26/projeto-aceito-no-google-summer-of-code-2014-gsoc2014</id>
+    <content type="html"><![CDATA[<p>Amigos, gostaria de compartilhar um pouco de minha emoção e alegria, pois <a href="http://www.google-melange.com/gsoc/project/details/google/gsoc2014/fabriziomello/5738600293466112">minha proposta de projeto</a> foi aceita para o <a href="http://www.google-melange.com/gsoc/homepage/google/gsoc2014">&ldquo;Google Summer of Code 2014&rdquo;</a>.</p>
+
+<p>Nos próximos meses estarei desenvolvendo uma nova funcionalidade para o <a href="http://www.postgresql.org">PostgreSQL</a> financiado pelo <a href="http://www.google-melange.com/gsoc/homepage/google/gsoc2014">Google</a>, como projeto de pesquisa do curso de Pós-Graduação em <a href="http://www.uniritter.edu.br/pos/tecnologia/metodos_ageis">Tecnologias Aplicadas a Sistemas de Informação com Métodos Ágeis</a> pela <a href="http://www.uniritter.edu.br">Uniritter Porto Alegre/RS</a>.</p>
+
+<p>O principal objetivo deste projeto é permitir que <a href="http://www.postgresql.org/docs/current/static/sql-createtable.html">&ldquo;unlogged tables&rdquo;</a> (tabelas que não geram registros no <a href="http://www.postgresql.org/docs/current/static/wal-intro.html">WAL</a>) sejam transformadas em tabelas regulares (que geram registros no WAL) e vice-versa. Para que isso aconteça será adicionado mais duas cláusulas ao comando sql &ldquo;ALTER TABLE&rdquo;:</p>
+
+<pre><code>ALTER TABLE table_name SET LOGGED;
+ALTER TABLE table_name SET UNLOGGED;
+</code></pre>
+
+<p>Quem tiver interesse em acompanhar a realização do projeto pode visitar a <a href="http://wiki.postgresql.org/wiki/Allow_an_unlogged_table_to_be_changed_to_logged_GSoC_2014">página do projeto no Wiki da comunidade PostgreSQL</a> e também o <a href="https://github.com/fabriziomello/postgres/tree/gsoc2014_alter_table_set_logged">código fonte no github</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Postgresql | Fabrízio de Royes Mello]]></title>
   <link href="http://fabriziomello.github.io/blog/categories/postgresql/atom.xml" rel="self"/>
   <link href="http://fabriziomello.github.io/"/>
-  <updated>2014-03-28T20:56:21-03:00</updated>
+  <updated>2014-04-27T00:54:13-03:00</updated>
   <id>http://fabriziomello.github.io/</id>
   <author>
     <name><![CDATA[Fabrízio de Royes Mello]]></name>
@@ -12,6 +12,25 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Projeto Aceito No Google Summer of Code 2014 (GSoC2014)]]></title>
+    <link href="http://fabriziomello.github.io/blog/2014/04/26/projeto-aceito-no-google-summer-of-code-2014-gsoc2014/"/>
+    <updated>2014-04-26T12:24:51-03:00</updated>
+    <id>http://fabriziomello.github.io/blog/2014/04/26/projeto-aceito-no-google-summer-of-code-2014-gsoc2014</id>
+    <content type="html"><![CDATA[<p>Amigos, gostaria de compartilhar um pouco de minha emoção e alegria, pois <a href="http://www.google-melange.com/gsoc/project/details/google/gsoc2014/fabriziomello/5738600293466112">minha proposta de projeto</a> foi aceita para o <a href="http://www.google-melange.com/gsoc/homepage/google/gsoc2014">&ldquo;Google Summer of Code 2014&rdquo;</a>.</p>
+
+<p>Nos próximos meses estarei desenvolvendo uma nova funcionalidade para o <a href="http://www.postgresql.org">PostgreSQL</a> financiado pelo <a href="http://www.google-melange.com/gsoc/homepage/google/gsoc2014">Google</a>, como projeto de pesquisa do curso de Pós-Graduação em <a href="http://www.uniritter.edu.br/pos/tecnologia/metodos_ageis">Tecnologias Aplicadas a Sistemas de Informação com Métodos Ágeis</a> pela <a href="http://www.uniritter.edu.br">Uniritter Porto Alegre/RS</a>.</p>
+
+<p>O principal objetivo deste projeto é permitir que <a href="http://www.postgresql.org/docs/current/static/sql-createtable.html">&ldquo;unlogged tables&rdquo;</a> (tabelas que não geram registros no <a href="http://www.postgresql.org/docs/current/static/wal-intro.html">WAL</a>) sejam transformadas em tabelas regulares (que geram registros no WAL) e vice-versa. Para que isso aconteça será adicionado mais duas cláusulas ao comando sql &ldquo;ALTER TABLE&rdquo;:</p>
+
+<pre><code>ALTER TABLE table_name SET LOGGED;
+ALTER TABLE table_name SET UNLOGGED;
+</code></pre>
+
+<p>Quem tiver interesse em acompanhar a realização do projeto pode visitar a <a href="http://wiki.postgresql.org/wiki/Allow_an_unlogged_table_to_be_changed_to_logged_GSoC_2014">página do projeto no Wiki da comunidade PostgreSQL</a> e também o <a href="https://github.com/fabriziomello/postgres/tree/gsoc2014_alter_table_set_logged">código fonte no github</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Database Refactoring]]></title>
@@ -70,17 +89,6 @@ O artigo ficou muito massa. Só tem uma coisa que me preocupa aqui.... qual o mo
     <id>http://fabriziomello.github.io/blog/2012/10/04/patch-sobre-create-schema-if-not-exists</id>
     <content type="html"><![CDATA[<div class='post'>
 Após algumas discussões [1] meu patch para adicionar a cláusula "IF NOT EXISTS" no "CREATE SCHEMA" foi aceito e efetuado o commit na branch master do git oficial do PostgreSQL [2] pelo commiter Mr. Tom Lane.<br /><br />Agora na 9.3 poderemos usar a cláusula "IF NOT EXISTS" no "CREATE SCHEMA" para que não gere um erro (cancelando transação atual) caso o esquema que está sendo criado já exista, por exemplo:<br /><br />BEGIN;<br />&nbsp; CREATE SCHEMA IF NOT EXISTS foo;<br />&nbsp; CREATE TABLE foo.bar();<br />COMMIT;<br /><br />O exemplo acima caso o esquema "foo" já exista não será gerado um erro e a transação irá prosseguir normalmente. O comportamento é similar ao já existente "IF NOT EXISTS" do "CREATE TABLE" [3].<br /><br />[1]&nbsp;<a href="https://commitfest.postgresql.org/action/patch_view?id=907">https://commitfest.postgresql.org/action/patch_view?id=907</a><br />[2]&nbsp;<a href="http://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=fb34e94d214d6767910df47aa7c605c452d11c57">http://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=fb34e94d214d6767910df47aa7c605c452d11c57</a><br />[3]&nbsp;<a href="http://www.postgresql.org/docs/9.2/interactive/sql-createtable.html">http://www.postgresql.org/docs/9.2/interactive/sql-createtable.html</a><br /><br />---<br />Fabrízio de Royes Mello<br />fabriziomello [at] gmail.com</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[PGDay/RS 2011 - Targettrust Irá Sortear 1 (Um) Curso De PostgreSQL (20h)]]></title>
-    <link href="http://fabriziomello.github.io/blog/2011/07/28/pgdayrs-2011-targettrust-ira-sortear-1/"/>
-    <updated>2011-07-28T00:00:00-03:00</updated>
-    <id>http://fabriziomello.github.io/blog/2011/07/28/pgdayrs-2011-targettrust-ira-sortear-1</id>
-    <content type="html"><![CDATA[<div class='post'>
-Durante o <a href="http://www.postgresql.org.br/eventos/pgday/rs">PGDay/RS 2011</a> a <a href="http://www.targettrust.com.br/">T@rgetTrust</a>, empresa especializada em treinamentos, irá sortear 1 (um) curso, a escolha do sorteado, da sua <a href="http://www.targettrust.com.br/web/formacao/administrador-e-desenvolvedor-postgresql.aspx">Formação PostgreSQL</a>:<br /><br /><ul><li><a href="http://www.targettrust.com.br/web/curso/postgresql-fundamentos.aspx?formacao=administrador-e-desenvolvedor-postgresql">PostgreSQL Fundamentos</a></li><li><a href="http://www.targettrust.com.br/web/curso/postgresql-procedural.aspx?formacao=administrador-e-desenvolvedor-postgresql">PostgreSQL Procedural</a></li><li><a href="http://www.targettrust.com.br/web/curso/postgresql-administracao.aspx?formacao=administrador-e-desenvolvedor-postgresql">PostgreSQL Administração</a></li><li><a href="http://www.targettrust.com.br/web/curso/postgresql-administracao-avancada.aspx?formacao=administrador-e-desenvolvedor-postgresql">PostgreSQL Administração Avançada</a></li></ul><div>Mais informações acesse o site do evento em:</div><div><br /></div><div><a href="http://www.postgresql.org.br/eventos/pgday/rs">http://www.postgresql.org.br/eventos/pgday/rs</a></div><div><br /></div><div><span class="Apple-style-span" style="color: #333333; font-family: Verdana, Arial, sans-serif; font-size: 13px; line-height: 16px;">Cordialmente,<br /><br />Fabrízio de Royes Mello<br />fabriziomello [at] gmail.com</span></div></div>
 
 ]]></content>
   </entry>

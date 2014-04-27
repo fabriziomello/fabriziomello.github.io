@@ -4,7 +4,7 @@
   <title><![CDATA[Fabrízio de Royes Mello]]></title>
   <link href="http://fabriziomello.github.io/atom.xml" rel="self"/>
   <link href="http://fabriziomello.github.io/"/>
-  <updated>2014-03-28T20:56:21-03:00</updated>
+  <updated>2014-04-27T00:54:13-03:00</updated>
   <id>http://fabriziomello.github.io/</id>
   <author>
     <name><![CDATA[Fabrízio de Royes Mello]]></name>
@@ -12,6 +12,25 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Projeto Aceito No Google Summer of Code 2014 (GSoC2014)]]></title>
+    <link href="http://fabriziomello.github.io/blog/2014/04/26/projeto-aceito-no-google-summer-of-code-2014-gsoc2014/"/>
+    <updated>2014-04-26T12:24:51-03:00</updated>
+    <id>http://fabriziomello.github.io/blog/2014/04/26/projeto-aceito-no-google-summer-of-code-2014-gsoc2014</id>
+    <content type="html"><![CDATA[<p>Amigos, gostaria de compartilhar um pouco de minha emoção e alegria, pois <a href="http://www.google-melange.com/gsoc/project/details/google/gsoc2014/fabriziomello/5738600293466112">minha proposta de projeto</a> foi aceita para o <a href="http://www.google-melange.com/gsoc/homepage/google/gsoc2014">&ldquo;Google Summer of Code 2014&rdquo;</a>.</p>
+
+<p>Nos próximos meses estarei desenvolvendo uma nova funcionalidade para o <a href="http://www.postgresql.org">PostgreSQL</a> financiado pelo <a href="http://www.google-melange.com/gsoc/homepage/google/gsoc2014">Google</a>, como projeto de pesquisa do curso de Pós-Graduação em <a href="http://www.uniritter.edu.br/pos/tecnologia/metodos_ageis">Tecnologias Aplicadas a Sistemas de Informação com Métodos Ágeis</a> pela <a href="http://www.uniritter.edu.br">Uniritter Porto Alegre/RS</a>.</p>
+
+<p>O principal objetivo deste projeto é permitir que <a href="http://www.postgresql.org/docs/current/static/sql-createtable.html">&ldquo;unlogged tables&rdquo;</a> (tabelas que não geram registros no <a href="http://www.postgresql.org/docs/current/static/wal-intro.html">WAL</a>) sejam transformadas em tabelas regulares (que geram registros no WAL) e vice-versa. Para que isso aconteça será adicionado mais duas cláusulas ao comando sql &ldquo;ALTER TABLE&rdquo;:</p>
+
+<pre><code>ALTER TABLE table_name SET LOGGED;
+ALTER TABLE table_name SET UNLOGGED;
+</code></pre>
+
+<p>Quem tiver interesse em acompanhar a realização do projeto pode visitar a <a href="http://wiki.postgresql.org/wiki/Allow_an_unlogged_table_to_be_changed_to_logged_GSoC_2014">página do projeto no Wiki da comunidade PostgreSQL</a> e também o <a href="https://github.com/fabriziomello/postgres/tree/gsoc2014_alter_table_set_logged">código fonte no github</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Novidades]]></title>
@@ -291,16 +310,6 @@ Deu muito certo aqui a instalação OBRIGADO!</div>
     <id>http://fabriziomello.github.io/blog/2010/01/22/postgresql-85-vs-90</id>
     <content type="html"><![CDATA[<div class='post'>
 Não é oficial ainda mas parece que não teremos mais uma versão 8.5 do PostgreSQL&#8230; a nova versão será 9.0 conforme discussão na lista de desenvolvimento do mesmo [1].<br /><br />O motivo dessa mudança é o grande número de novas funcionalidades que irá incorporar a nova versão do PostgreSQL&#8230; isso é muito interessante pois a evolução do &#8220;elefantinho&#8221; está cada vez mais acelerada&#8230;<br /><br />Vida longa ao PostgreSQL!!!<br /><br /><br />[1] <a href="http://archives.postgresql.org/pgsql-hackers/2010-01/msg02056.php">http://archives.postgresql.org/pgsql-hackers/2010-01/msg02056.php</a><br /><br /><br />Cordialmente,<br /><br />Fabrízio de Royes Mello<br />fabriziomello [at] gmail.com</div>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Case PgBouncer 1.3 Com PostgreSQL 8.2]]></title>
-    <link href="http://fabriziomello.github.io/blog/2009/07/03/case-pgbouncer-13-com-postgresql-82/"/>
-    <updated>2009-07-03T00:00:00-03:00</updated>
-    <id>http://fabriziomello.github.io/blog/2009/07/03/case-pgbouncer-13-com-postgresql-82</id>
-    <content type="html"><![CDATA[<div class='post'>
-Pessoal,<br /><br />Estou finalizando a implantação do <a href="https://developer.skype.com/SkypeGarage/DbProjects/PgBouncer">PgBouncer</a><a href="https://developer.skype.com/SkypeGarage/DbProjects/PgBouncer"> 1.3</a> com <a href="http://www.postgresql.org/docs/8.2/interactive/index.html">PostgreSQL 8.2</a> e obtive excelentes resultados só pelo fato de colocar o Pool de Conexões na frente do &#8220;postmaster&#8221;.<br /><br />Até aqui não temos nada de muito surpreendente a não ser pelo fato de que, segundo a documentação do próprio <a href="https://developer.skype.com/SkypeGarage/DbProjects/PgBouncer">PgBouncer</a> fala que podemos ter 100% de transparência com o <a href="http://www.postgresql.org/docs/8.3/interactive/index.html">PostgreSQL 8.3</a> pelo fato do comando &#8221;<a href="http://www.postgresql.org/docs/8.3/interactive/sql-discard.html">DISCARD</a>&#8221; estar presente apartir dessa release.<br /><br />Como na versão que estamos utilizando, a 8.2, não existe essa implementação então o jeito foi implementar uma PL que &#8220;emule&#8221; o comportamento do &#8221;<a href="http://www.postgresql.org/docs/8.3/interactive/sql-discard.html">DISCARD</a>&#8221;.<br /><br />Através da lista de discussão da Comunidade Brasileira de PostgreSQL (<a href="https://listas.postgresql.org.br/cgi-bin/mailman/listinfo/pgbr-geral">pgbr-geral)</a>, com a ajuda do colega <a href="http://www.timbira.com/">Euler</a>, implementei uma PL para suprir essa falta conforme segue:<br /><pre><br /><span style=";font-family:courier new;font-size:78%;"  >create or replace function fc_discard_all() returns void as<br />$$<br />declare<br />  rComando record;<br />  iVersao  integer;<br />begin<br /><br />  select cast(setting as integer) <br />    into iVersao<br />    from pg_settings <br />   where name ~ 'server_version_num';<br /><br />  if not found then<br />    raise exception 'A versão do PostgreSQL deve ser >= 8.2';<br />  end if;<br /><br />  if iVersao >= 80300 then<br />    execute 'discard all';<br />    return;<br />  end if;<br /><br />  set session authorization default;<br /><br />  reset all;<br /><br />  for rComando in <br />    select name <br />      from pg_prepared_statements<br />  loop<br />    execute 'deallocate '||rComando.name;<br />  end loop;<br /><br />  for rComando in<br />    select name<br />      from pg_cursors<br />     where name not like '%unnamed%' <br />  loop<br />    execute 'close '||rComando.name;<br />  end loop;<br /><br />  unlisten *;<br /><br />  perform pg_advisory_unlock_all();<br /><br />  for rComando in<br />    select distinct<br />           table_schema,<br />           table_name<br />      from information_schema.tables <br />     where table_type = 'LOCAL TEMPORARY'<br />  loop<br />    execute 'drop table if exists '||quote_ident(rComando.table_schema)||'.'||quote_ident(rComando.table_name)||' cascade';<br />  end loop;<br /><br />  return;<br />end;<br />$$<br />language plpgsql;<br /></span><br /></pre>No meu arquivo de configuração do pool (pgbouncer.ini) fiz o seguinte:<br /><br />server_reset_query = SELECT fc_discard_all()<br /><br /><br />Os únicos efeitos colaterais dessa solução são:<br /><ol><li>Se a base de dados que for acessada não tiver a PL acima criada vai gerar um log de erro, mas não impacta em problemas na conexão</li><li>Não foi possível implementar uma emulação para o DISCARD PLANS pois, segundo o colega <a href="http://www.timbira.com">Euler</a>, esse comando <a href="http://listas.postgresql.org.br/pipermail/pgbr-geral/2009-June/015926.html">veio em conjunto com a funcionalidade de invalidação de planos em funções procedurais, logo não pode ser emulada em versões menores que 8.3</a><br /></li></ol>Tive de implementar esse recurso pois preciso descartar tabelas temporárias e outros recursos que são utilizados pela minha aplicação.<br /><br />O modo do pool que estou utilizando é o &#8220;session&#8221; pois preciso da sessão do inicio ao fim com o mesmo estado.<br /><br />Se alguém tiver alguma dica e/ou critica estou a disposição.<br /><br /><br />Cordialmente,<br /><br />Fabrízio de Royes Mello<br />fabriziomello [at] gmail.com</div>
 ]]></content>
   </entry>
   
