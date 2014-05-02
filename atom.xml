@@ -4,7 +4,7 @@
   <title><![CDATA[Fabrízio de Royes Mello]]></title>
   <link href="http://fabriziomello.github.io/atom.xml" rel="self"/>
   <link href="http://fabriziomello.github.io/"/>
-  <updated>2014-05-02T02:27:24-03:00</updated>
+  <updated>2014-05-02T11:45:13-03:00</updated>
   <id>http://fabriziomello.github.io/</id>
   <author>
     <name><![CDATA[Fabrízio de Royes Mello]]></name>
@@ -14,15 +14,15 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Aguardando Pela 9.4 - Introduzindo JSONB]]></title>
-    <link href="http://fabriziomello.github.io/blog/2014/05/01/aguardando-pela-9-dot-4-introduzindo-jsonb/"/>
+    <title type="html"><![CDATA[PostgreSQL (Aguardando Pela 9.4) - Introduzindo JSONB, Um Formato Estruturado Para Armazenar Objetos JSON]]></title>
+    <link href="http://fabriziomello.github.io/blog/2014/05/01/postgresql-aguardando-pela-9-dot-4-introduzindo-jsonb/"/>
     <updated>2014-05-01T23:59:07-03:00</updated>
-    <id>http://fabriziomello.github.io/blog/2014/05/01/aguardando-pela-9-dot-4-introduzindo-jsonb</id>
-    <content type="html"><![CDATA[<p><strong>ATENÇÃO!</strong> Este post é uma tradução para PT-BR do <a href="http://www.depesz.com/2014/03/25/waiting-for-9-4-introduce-jsonb-a-structured-format-for-storing-json/">blog do Sr. Hubert Depesz Lubaczewski</a>. Fique a vontade para comentar quaisquer problemas na tradução.</p>
+    <id>http://fabriziomello.github.io/blog/2014/05/01/postgresql-aguardando-pela-9-dot-4-introduzindo-jsonb</id>
+    <content type="html"><![CDATA[<p><strong>ATENÇÃO!</strong> Este post é uma tradução para Português Brasil do <a href="http://www.depesz.com/2014/03/25/waiting-for-9-4-introduce-jsonb-a-structured-format-for-storing-json/">blog do Sr. Hubert Depesz Lubaczewski</a>. Fique a vontade para comentar quaisquer problemas na tradução.</p>
 
 <p>No dia 23 de Março de 2014, Andrew Dunstan <a href="http://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=d9134d0a355cfa447adc80db4505d5931084278a">commitou</a> o seguinte patch:</p>
 
-<blockquote><p><strong>Introduzindo jsonb, um formato estruturado para armazenar json.</strong></p>
+<blockquote><p><strong>Introduzindo jsonb, um formato estruturado para armazenar objetos json.</strong></p>
 
 <p>O novo formato aceita exatamente os mesmos dados como o tipo json já existente.
 Entretanto este é armazenado em um formato que não requer a realização de um parse
