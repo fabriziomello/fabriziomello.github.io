@@ -1,16 +1,16 @@
 ---
 layout: post
-title: "Aguardando pela 9.4 - Introduzindo JSONB"
+title: "PostgreSQL (aguardando pela 9.4) - Introduzindo JSONB, um formato estruturado para armazenar objetos JSON"
 date: 2014-05-01 23:59:07 -0300
 comments: true
 categories: [postgresql, jsonb, depesz] 
 ---
 
-**ATENÇÃO!** Este post é uma tradução para PT-BR do [blog do Sr. Hubert Depesz Lubaczewski](http://www.depesz.com/2014/03/25/waiting-for-9-4-introduce-jsonb-a-structured-format-for-storing-json/). Fique a vontade para comentar quaisquer problemas na tradução.
+**ATENÇÃO!** Este post é uma tradução para Português Brasil do [blog do Sr. Hubert Depesz Lubaczewski](http://www.depesz.com/2014/03/25/waiting-for-9-4-introduce-jsonb-a-structured-format-for-storing-json/). Fique a vontade para comentar quaisquer problemas na tradução.
 
 No dia 23 de Março de 2014, Andrew Dunstan [commitou](http://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=d9134d0a355cfa447adc80db4505d5931084278a) o seguinte patch:
 
-> **Introduzindo jsonb, um formato estruturado para armazenar json.**
+> **Introduzindo jsonb, um formato estruturado para armazenar objetos json.**
 >
 > O novo formato aceita exatamente os mesmos dados como o tipo json já existente.
 > Entretanto este é armazenado em um formato que não requer a realização de um parse
