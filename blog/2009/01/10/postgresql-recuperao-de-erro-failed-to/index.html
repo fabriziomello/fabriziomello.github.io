@@ -205,6 +205,10 @@ Ola Fabrizio,<BR/><BR/>Que tamanho mais ou menos tinha essa base?<BR/><BR/>Olhan
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/05/01/aguardando-pela-9-dot-4-introduzindo-jsonb/">Aguardando Pela 9.4 - Introduzindo JSONB</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/04/26/projeto-aceito-no-google-summer-of-code-2014-gsoc2014/">Projeto Aceito No Google Summer of Code 2014 (GSoC2014)</a>
       </li>
     
@@ -220,11 +224,36 @@ Ola Fabrizio,<BR/><BR/>Que tamanho mais ou menos tinha essa base?<BR/><BR/>Olhan
         <a href="/blog/2013/06/10/bad-smells-mal-cheiros-em-bancos-de/">Bad Smells (Mal Cheiros) Em Bancos De Dados</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/02/21/postgresql-93devel-nova-extensao/">PostgreSQL 9.3devel - Nova Extensão "Postgres_fdw"</a>
-      </li>
-    
   </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/fabriziomello">@fabriziomello</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fabriziomello',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
 </section>
 
 

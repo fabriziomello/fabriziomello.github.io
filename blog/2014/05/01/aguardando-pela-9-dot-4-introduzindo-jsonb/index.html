@@ -1,0 +1,571 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Aguardando Pela 9.4 - Introduzindo JSONB - Fabrízio de Royes Mello</title>
+  <meta name="author" content="Fabrízio de Royes Mello">
+
+  
+  <meta name="description" content="ATENÇÃO! Este post é uma tradução para PT-BR do blog do Sr. Hubert Depesz Lubaczewski. Fique a vontade para comentar quaisquer problemas na tradução &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fabriziomello.github.io/blog/2014/05/01/aguardando-pela-9-dot-4-introduzindo-jsonb">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Fabrízio de Royes Mello" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49388509-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Fabrízio de Royes Mello</a></h1>
+  
+    <h2>Blog sobre Tecnologia da Informação</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fabriziomello.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Aguardando Pela 9.4 - Introduzindo JSONB</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-01T23:59:07-03:00" pubdate data-updated="true">May 1<span>st</span>, 2014</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://fabriziomello.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong>ATENÇÃO!</strong> Este post é uma tradução para PT-BR do <a href="http://www.depesz.com/2014/03/25/waiting-for-9-4-introduce-jsonb-a-structured-format-for-storing-json/">blog do Sr. Hubert Depesz Lubaczewski</a>. Fique a vontade para comentar quaisquer problemas na tradução.</p>
+
+<p>No dia 23 de Março de 2014, Andrew Dunstan <a href="http://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=d9134d0a355cfa447adc80db4505d5931084278a">commitou</a> o seguinte patch:</p>
+
+<blockquote><p><strong>Introduzindo jsonb, um formato estruturado para armazenar json.</strong></p>
+
+<p>O novo formato aceita exatamente os mesmos dados como o tipo json já existente.
+Entretanto este é armazenado em um formato que não requer a realização de um parse
+do text original para processá-lo, tornando-o muito mais adequado para indexação e
+outras operações. Espaços em brancos desnecessários são descartados, e a ordem das
+chaves dos objetos não é preservada. Nem são mantidas chaves de objetos duplicadas &ndash;
+o valor para uma determinada chave é armazenada uma única vez.</p>
+
+<p>O novo tipo possui todas as funções e operadores que o tipo json tem, com excessão
+das funções para geração de objetos json (to_json, json_agg, etc.), e também possui
+a mesma semântica. Adicionalmente existem classes de operadores para índices to tipo
+hash e btree, e duas classes para índices GIN o qual não existe para o tipo json.</p>
+
+<p>Essa funcionalidade evoluiu de um trabalho anterior do Oleg Bartunov e Teodor Sigaev,
+que se destinava a fornecer facilidades semelhantes ao hstore aninhado, mas que no
+final provou ter alguns problemas de compatibilidade significativos.</p>
+
+<p>Autores: Oleg Bartunov, Teodor Sigaev, Peter Geoghegan e Andrew Dunstan.
+Revisão: Andres Freund</p></blockquote>
+
+<p>Depois que ele foi commitado, ele foi explicado muito bem, mas eu decidi escrever sobre isso também, com alguns exemplos. Primeiro, vamos ver como ele funciona.</p>
+
+<p>Vou começar com alguns valores de teste:</p>
+
+<pre><code>{"a":"abc","d":"def","z":[1,2,3]}
+
+{"a":"abc","d";"def","z":[1x2,3]}
+
+{
+    "a": "abc",
+    "d": "def",
+    "z": [1, 2, 3]
+}
+
+{"a":"abc","d":"def","z":[1,2,3],"d":"overwritten"}
+</code></pre>
+
+<p>Primeiro, vamos ver o que acontece após transformar esses valores em json e jsonb:</p>
+
+<pre><code>select '{"a":"abc","d":"def","z":[1,2,3]}'::json;
+               json                
+-----------------------------------
+ {"a":"abc","d":"def","z":[1,2,3]}
+(1 row)
+
+select '{"a":"abc","d":"def","z":[1,2,3]}'::jsonb;
+                  jsonb                   
+------------------------------------------
+ {"a": "abc", "d": "def", "z": [1, 2, 3]}
+(1 row)
+</code></pre>
+
+<p>Tudo parece correto aqui, porém a saída do jsonb foi reformatada. Aqui ele não fez muita coisa, mas adicionou alguns espaços em branco. Isso é bom.</p>
+
+<pre><code>select '{"a":"abc","d";"def","z":[1x2,3]}'::json;
+ERROR:  invalid input syntax for type json
+LINE 1: select '{"a":"abc","d";"def","z":[1x2,3]}'::json;
+               ^
+DETAIL:  Token ";" is invalid.
+CONTEXT:  JSON data, line 1: {"a":"abc","d";...
+
+select '{"a":"abc","d";"def","z":[1x2,3]}'::jsonb;
+ERROR:  invalid input syntax for type json
+LINE 1: select '{"a":"abc","d";"def","z":[1x2,3]}'::jsonb;
+               ^
+DETAIL:  Token ";" is invalid.
+CONTEXT:  JSON data, line 1: {"a":"abc","d";...
+</code></pre>
+
+<p>Em ambos os casos o erro foi reportado corretamente, mas no caso do jsonb ele disse: &ldquo;invalid input syntax for type json&rdquo;. É provavelmente devido a ordem do cast, e normalmente isso deve estar correto. De qualquer maneira JSON e JSONB são similares o suficiente para não causar problemas.</p>
+
+<pre><code>select '{
+    "a": "abc",
+    "d": "def",
+    "z": [1, 2, 3]
+}'::json;
+        json        
+--------------------
+ {                 +
+     "a": "abc",   +
+     "d": "def",   +
+     "z": [1, 2, 3]+
+ }
+(1 row)
+
+select '{
+    "a": "abc",
+    "d": "def",
+    "z": [1, 2, 3]
+}'::jsonb;
+                  jsonb                   
+------------------------------------------
+ {"a": "abc", "d": "def", "z": [1, 2, 3]}
+(1 row)
+</code></pre>
+
+<p>Aqui nós vemos a remoção de espaços em branco. Eu diria que é muito legal. É claro, a não ser que (por qualquer motivo) você queira manter os espaços, mas isso não deveria ser significativo, então dependendo de eles estarem lá não parece sensato.</p>
+
+<pre><code>select '{"a":"abc","d":"def","z":[1,2,3],"d":"overwritten"}'::json;
+                        json                         
+-----------------------------------------------------
+ {"a":"abc","d":"def","z":[1,2,3],"d":"overwritten"}
+(1 row)
+
+select '{"a":"abc","d":"def","z":[1,2,3],"d":"overwritten"}'::jsonb;
+                      jsonb                       
+--------------------------------------------------
+ {"a": "abc", "d": "overwritten", "z": [1, 2, 3]}
+(1 row)
+</code></pre>
+
+<p>E o valor está sendo sobrescrito. Eu digo que isso é ótimo.</p>
+
+<p>Quanto a utilização do espaço em disco, isso irá definitivamente depender do caso, mas um rápido teste mostra que jsonb pode utilizar bem mais espaço em disco:</p>
+
+<pre><code>select pg_column_size('{"a":"abc","d":"def","z":[1,2,3]}'::jsonb);
+ pg_column_size 
+----------------
+             84
+(1 row)
+
+select pg_column_size('{"a":"abc","d":"def","z":[1,2,3]}'::json);
+ pg_column_size 
+----------------
+             37
+(1 row)
+</code></pre>
+
+<p>Por outro lado, para este JSON:</p>
+
+<pre><code>{"widget": {
+    "debug": "on",
+    "window": {
+        "title": "Sample Konfabulator Widget",
+        "name": "main_window",
+        "width": 500,
+        "height": 500
+    },
+    "image": { 
+        "src": "Images/Sun.png",
+        "name": "sun1",
+        "hOffset": 250,
+        "vOffset": 250,
+        "alignment": "center"
+    },
+    "text": {
+        "data": "Click Here",
+        "size": 36,
+        "style": "bold",
+        "name": "text1",
+        "hOffset": 250,
+        "vOffset": 100,
+        "alignment": "center",
+        "onMouseUp": "sun1.opacity = (sun1.opacity / 100) * 90;"
+    }
+}}
+</code></pre>
+
+<p>O valor do JSON tem 605 bytes e o JSONb 524 bytes.</p>
+
+<p>O que há de mais &hellip;</p>
+
+<p>Para JSONb temos mais operadores. Por exemplo &ndash; igualdade:</p>
+
+<pre><code>select '{"a":1, "b":2}'::jsonb = '{"b":2, "a":1}'::jsonb;
+ ?column? 
+----------
+ t
+(1 row)
+</code></pre>
+
+<p>Mais operadores estão descritos na <a href="http://www.postgresql.org/docs/devel/static/functions-json.html">documentação</a>.</p>
+
+<p>O que mais &ndash; o novo tipo de dados pode utilizar índices para pesquisar por elementos.</p>
+
+<p>Eu criei uma tabela para testes:</p>
+
+<pre><code>create table test (v jsonb);
+</code></pre>
+
+<p>e inseri nela 100 mil linhas, parecidas com:</p>
+
+<pre><code>{"i": 42, "s": "ryzdaoop"}
+</code></pre>
+
+<p>Algumas das linhas (~ 1%) tem um valor adicional no json &ndash; chave &ldquo;r&rdquo; com valor 1.</p>
+
+<p>Agora eu posso criar um índice nesta tabela:</p>
+
+<pre><code>create index whatever on test using gin (v);
+CREATE INDEX
+</code></pre>
+
+<p>e agora:</p>
+
+<pre><code>explain analyze select * from test where v ? 'r';
+                                                      QUERY PLAN                                                       
+-----------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on test  (cost=16.77..307.23 rows=100 width=42) (actual time=0.554..2.670 rows=1024 loops=1)
+   Recheck Cond: (v ? 'r'::text)
+   Heap Blocks: exact=644
+   -&gt;  Bitmap Index Scan on whatever  (cost=0.00..16.75 rows=100 width=0) (actual time=0.416..0.416 rows=1024 loops=1)
+         Index Cond: (v ? 'r'::text)
+ Planning time: 0.475 ms
+ Total runtime: 2.788 ms
+(7 rows)
+</code></pre>
+
+<p>Eu também poderia fazer:</p>
+
+<pre><code>explain analyze select * from test where v @&gt; '{"i":42}';
+                                                      QUERY PLAN                                                      
+----------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on test  (cost=28.77..319.23 rows=100 width=42) (actual time=1.132..1.707 rows=103 loops=1)
+   Recheck Cond: (v @&gt; '{"i": 42}'::jsonb)
+   Heap Blocks: exact=99
+   -&gt;  Bitmap Index Scan on whatever  (cost=0.00..28.75 rows=100 width=0) (actual time=1.089..1.089 rows=103 loops=1)
+         Index Cond: (v @&gt; '{"i": 42}'::jsonb)
+ Planning time: 0.482 ms
+ Total runtime: 1.783 ms
+(7 rows)
+</code></pre>
+
+<p>Ou mesmo:</p>
+
+<pre><code>explain analyze select * from test where v @&gt; '{"i":42, "r":1}';
+                                                     QUERY PLAN                                                     
+--------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on test  (cost=52.77..343.23 rows=100 width=42) (actual time=1.171..1.191 rows=3 loops=1)
+   Recheck Cond: (v @&gt; '{"i": 42, "r": 1}'::jsonb)
+   Heap Blocks: exact=3
+   -&gt;  Bitmap Index Scan on whatever  (cost=0.00..52.75 rows=100 width=0) (actual time=1.143..1.143 rows=3 loops=1)
+         Index Cond: (v @&gt; '{"i": 42, "r": 1}'::jsonb)
+ Planning time: 0.530 ms
+ Total runtime: 1.256 ms
+(7 rows)
+</code></pre>
+
+<p>Isso é muito legal.</p>
+
+<p>Infelizmente você não pode utilizar índices para realizar uma pesquisa mais &ldquo;profunda&rdquo;. O que significa isso?</p>
+
+<p>Vamos supor que você tem um valor JSON como este:</p>
+
+<pre><code>{"a": [1,2,3,4]}
+</code></pre>
+
+<p>Você pode indexá-lo, e pesquisar por &ldquo;value ? &lsquo;a&rsquo;&rdquo;, ou &ldquo;value @> &lsquo;{&#8220;a&rdquo;:[1,2,3,4]}&rsquo;&ldquo;, mas você não pode pesquisar (utilizando índice) por &#8220;linhas que tenha 3 na matriz que está sob a chave &lsquo;a&rsquo; no json&rdquo;.</p>
+
+<p>É claro que você pode trabalhar em torno dele criando índice em ((value &ndash;> &lsquo;a&rsquo;)), se for isso que você realmente precisa.</p>
+
+<p>De qualquer maneira eu realmente gostei disso. Parece que funciona muito bem, e eu espero que tenhamos mais recursos no futuro.</p>
+
+<p>Valeu pessoal.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Fabrízio de Royes Mello</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-01T23:59:07-03:00" pubdate data-updated="true">May 1<span>st</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/depesz/'>depesz</a>, <a class='category' href='/blog/categories/jsonb/'>jsonb</a>, <a class='category' href='/blog/categories/postgresql/'>postgresql</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fabriziomello.github.io/blog/2014/05/01/aguardando-pela-9-dot-4-introduzindo-jsonb/" data-via="fabriziomello" data-counturl="http://fabriziomello.github.io/blog/2014/05/01/aguardando-pela-9-dot-4-introduzindo-jsonb/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/04/26/projeto-aceito-no-google-summer-of-code-2014-gsoc2014/" title="Previous Post: Projeto aceito no Google Summer of Code 2014 (GSoC2014)">&laquo; Projeto aceito no Google Summer of Code 2014 (GSoC2014)</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/05/01/aguardando-pela-9-dot-4-introduzindo-jsonb/">Aguardando Pela 9.4 - Introduzindo JSONB</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/26/projeto-aceito-no-google-summer-of-code-2014-gsoc2014/">Projeto Aceito No Google Summer of Code 2014 (GSoC2014)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/10/novidades/">Novidades</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/10/database-refactoring/">Database Refactoring</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/10/bad-smells-mal-cheiros-em-bancos-de/">Bad Smells (Mal Cheiros) Em Bancos De Dados</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/fabriziomello">@fabriziomello</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fabriziomello',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/fabriziomello@gmail.com?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Fabrízio de Royes Mello -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'fabriziomello';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://fabriziomello.github.io/blog/2014/05/01/aguardando-pela-9-dot-4-introduzindo-jsonb/';
+        var disqus_url = 'http://fabriziomello.github.io/blog/2014/05/01/aguardando-pela-9-dot-4-introduzindo-jsonb/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

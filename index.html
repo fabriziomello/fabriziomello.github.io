@@ -9,7 +9,7 @@
   <meta name="author" content="Fabrízio de Royes Mello">
 
   
-  <meta name="description" content="Amigos, gostaria de compartilhar um pouco de minha emoção e alegria, pois minha proposta de projeto foi aceita para o &ldquo;Google Summer of Code &hellip;">
+  <meta name="description" content="ATENÇÃO! Este post é uma tradução para PT-BR do blog do Sr. Hubert Depesz Lubaczewski. Fique a vontade para comentar quaisquer problemas na tradução &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -83,6 +83,303 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/05/01/aguardando-pela-9-dot-4-introduzindo-jsonb/">Aguardando Pela 9.4 - Introduzindo JSONB</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-01T23:59:07-03:00" pubdate data-updated="true">May 1<span>st</span>, 2014</time>
+        
+           | <a href="/blog/2014/05/01/aguardando-pela-9-dot-4-introduzindo-jsonb/#disqus_thread"
+             data-disqus-identifier="http://fabriziomello.github.io/blog/2014/05/01/aguardando-pela-9-dot-4-introduzindo-jsonb/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>ATENÇÃO!</strong> Este post é uma tradução para PT-BR do <a href="http://www.depesz.com/2014/03/25/waiting-for-9-4-introduce-jsonb-a-structured-format-for-storing-json/">blog do Sr. Hubert Depesz Lubaczewski</a>. Fique a vontade para comentar quaisquer problemas na tradução.</p>
+
+<p>No dia 23 de Março de 2014, Andrew Dunstan <a href="http://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=d9134d0a355cfa447adc80db4505d5931084278a">commitou</a> o seguinte patch:</p>
+
+<blockquote><p><strong>Introduzindo jsonb, um formato estruturado para armazenar json.</strong></p>
+
+<p>O novo formato aceita exatamente os mesmos dados como o tipo json já existente.
+Entretanto este é armazenado em um formato que não requer a realização de um parse
+do text original para processá-lo, tornando-o muito mais adequado para indexação e
+outras operações. Espaços em brancos desnecessários são descartados, e a ordem das
+chaves dos objetos não é preservada. Nem são mantidas chaves de objetos duplicadas &ndash;
+o valor para uma determinada chave é armazenada uma única vez.</p>
+
+<p>O novo tipo possui todas as funções e operadores que o tipo json tem, com excessão
+das funções para geração de objetos json (to_json, json_agg, etc.), e também possui
+a mesma semântica. Adicionalmente existem classes de operadores para índices to tipo
+hash e btree, e duas classes para índices GIN o qual não existe para o tipo json.</p>
+
+<p>Essa funcionalidade evoluiu de um trabalho anterior do Oleg Bartunov e Teodor Sigaev,
+que se destinava a fornecer facilidades semelhantes ao hstore aninhado, mas que no
+final provou ter alguns problemas de compatibilidade significativos.</p>
+
+<p>Autores: Oleg Bartunov, Teodor Sigaev, Peter Geoghegan e Andrew Dunstan.
+Revisão: Andres Freund</p></blockquote>
+
+<p>Depois que ele foi commitado, ele foi explicado muito bem, mas eu decidi escrever sobre isso também, com alguns exemplos. Primeiro, vamos ver como ele funciona.</p>
+
+<p>Vou começar com alguns valores de teste:</p>
+
+<pre><code>{"a":"abc","d":"def","z":[1,2,3]}
+
+{"a":"abc","d";"def","z":[1x2,3]}
+
+{
+    "a": "abc",
+    "d": "def",
+    "z": [1, 2, 3]
+}
+
+{"a":"abc","d":"def","z":[1,2,3],"d":"overwritten"}
+</code></pre>
+
+<p>Primeiro, vamos ver o que acontece após transformar esses valores em json e jsonb:</p>
+
+<pre><code>select '{"a":"abc","d":"def","z":[1,2,3]}'::json;
+               json                
+-----------------------------------
+ {"a":"abc","d":"def","z":[1,2,3]}
+(1 row)
+
+select '{"a":"abc","d":"def","z":[1,2,3]}'::jsonb;
+                  jsonb                   
+------------------------------------------
+ {"a": "abc", "d": "def", "z": [1, 2, 3]}
+(1 row)
+</code></pre>
+
+<p>Tudo parece correto aqui, porém a saída do jsonb foi reformatada. Aqui ele não fez muita coisa, mas adicionou alguns espaços em branco. Isso é bom.</p>
+
+<pre><code>select '{"a":"abc","d";"def","z":[1x2,3]}'::json;
+ERROR:  invalid input syntax for type json
+LINE 1: select '{"a":"abc","d";"def","z":[1x2,3]}'::json;
+               ^
+DETAIL:  Token ";" is invalid.
+CONTEXT:  JSON data, line 1: {"a":"abc","d";...
+
+select '{"a":"abc","d";"def","z":[1x2,3]}'::jsonb;
+ERROR:  invalid input syntax for type json
+LINE 1: select '{"a":"abc","d";"def","z":[1x2,3]}'::jsonb;
+               ^
+DETAIL:  Token ";" is invalid.
+CONTEXT:  JSON data, line 1: {"a":"abc","d";...
+</code></pre>
+
+<p>Em ambos os casos o erro foi reportado corretamente, mas no caso do jsonb ele disse: &ldquo;invalid input syntax for type json&rdquo;. É provavelmente devido a ordem do cast, e normalmente isso deve estar correto. De qualquer maneira JSON e JSONB são similares o suficiente para não causar problemas.</p>
+
+<pre><code>select '{
+    "a": "abc",
+    "d": "def",
+    "z": [1, 2, 3]
+}'::json;
+        json        
+--------------------
+ {                 +
+     "a": "abc",   +
+     "d": "def",   +
+     "z": [1, 2, 3]+
+ }
+(1 row)
+
+select '{
+    "a": "abc",
+    "d": "def",
+    "z": [1, 2, 3]
+}'::jsonb;
+                  jsonb                   
+------------------------------------------
+ {"a": "abc", "d": "def", "z": [1, 2, 3]}
+(1 row)
+</code></pre>
+
+<p>Aqui nós vemos a remoção de espaços em branco. Eu diria que é muito legal. É claro, a não ser que (por qualquer motivo) você queira manter os espaços, mas isso não deveria ser significativo, então dependendo de eles estarem lá não parece sensato.</p>
+
+<pre><code>select '{"a":"abc","d":"def","z":[1,2,3],"d":"overwritten"}'::json;
+                        json                         
+-----------------------------------------------------
+ {"a":"abc","d":"def","z":[1,2,3],"d":"overwritten"}
+(1 row)
+
+select '{"a":"abc","d":"def","z":[1,2,3],"d":"overwritten"}'::jsonb;
+                      jsonb                       
+--------------------------------------------------
+ {"a": "abc", "d": "overwritten", "z": [1, 2, 3]}
+(1 row)
+</code></pre>
+
+<p>E o valor está sendo sobrescrito. Eu digo que isso é ótimo.</p>
+
+<p>Quanto a utilização do espaço em disco, isso irá definitivamente depender do caso, mas um rápido teste mostra que jsonb pode utilizar bem mais espaço em disco:</p>
+
+<pre><code>select pg_column_size('{"a":"abc","d":"def","z":[1,2,3]}'::jsonb);
+ pg_column_size 
+----------------
+             84
+(1 row)
+
+select pg_column_size('{"a":"abc","d":"def","z":[1,2,3]}'::json);
+ pg_column_size 
+----------------
+             37
+(1 row)
+</code></pre>
+
+<p>Por outro lado, para este JSON:</p>
+
+<pre><code>{"widget": {
+    "debug": "on",
+    "window": {
+        "title": "Sample Konfabulator Widget",
+        "name": "main_window",
+        "width": 500,
+        "height": 500
+    },
+    "image": { 
+        "src": "Images/Sun.png",
+        "name": "sun1",
+        "hOffset": 250,
+        "vOffset": 250,
+        "alignment": "center"
+    },
+    "text": {
+        "data": "Click Here",
+        "size": 36,
+        "style": "bold",
+        "name": "text1",
+        "hOffset": 250,
+        "vOffset": 100,
+        "alignment": "center",
+        "onMouseUp": "sun1.opacity = (sun1.opacity / 100) * 90;"
+    }
+}}
+</code></pre>
+
+<p>O valor do JSON tem 605 bytes e o JSONb 524 bytes.</p>
+
+<p>O que há de mais &hellip;</p>
+
+<p>Para JSONb temos mais operadores. Por exemplo &ndash; igualdade:</p>
+
+<pre><code>select '{"a":1, "b":2}'::jsonb = '{"b":2, "a":1}'::jsonb;
+ ?column? 
+----------
+ t
+(1 row)
+</code></pre>
+
+<p>Mais operadores estão descritos na <a href="http://www.postgresql.org/docs/devel/static/functions-json.html">documentação</a>.</p>
+
+<p>O que mais &ndash; o novo tipo de dados pode utilizar índices para pesquisar por elementos.</p>
+
+<p>Eu criei uma tabela para testes:</p>
+
+<pre><code>create table test (v jsonb);
+</code></pre>
+
+<p>e inseri nela 100 mil linhas, parecidas com:</p>
+
+<pre><code>{"i": 42, "s": "ryzdaoop"}
+</code></pre>
+
+<p>Algumas das linhas (~ 1%) tem um valor adicional no json &ndash; chave &ldquo;r&rdquo; com valor 1.</p>
+
+<p>Agora eu posso criar um índice nesta tabela:</p>
+
+<pre><code>create index whatever on test using gin (v);
+CREATE INDEX
+</code></pre>
+
+<p>e agora:</p>
+
+<pre><code>explain analyze select * from test where v ? 'r';
+                                                      QUERY PLAN                                                       
+-----------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on test  (cost=16.77..307.23 rows=100 width=42) (actual time=0.554..2.670 rows=1024 loops=1)
+   Recheck Cond: (v ? 'r'::text)
+   Heap Blocks: exact=644
+   -&gt;  Bitmap Index Scan on whatever  (cost=0.00..16.75 rows=100 width=0) (actual time=0.416..0.416 rows=1024 loops=1)
+         Index Cond: (v ? 'r'::text)
+ Planning time: 0.475 ms
+ Total runtime: 2.788 ms
+(7 rows)
+</code></pre>
+
+<p>Eu também poderia fazer:</p>
+
+<pre><code>explain analyze select * from test where v @&gt; '{"i":42}';
+                                                      QUERY PLAN                                                      
+----------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on test  (cost=28.77..319.23 rows=100 width=42) (actual time=1.132..1.707 rows=103 loops=1)
+   Recheck Cond: (v @&gt; '{"i": 42}'::jsonb)
+   Heap Blocks: exact=99
+   -&gt;  Bitmap Index Scan on whatever  (cost=0.00..28.75 rows=100 width=0) (actual time=1.089..1.089 rows=103 loops=1)
+         Index Cond: (v @&gt; '{"i": 42}'::jsonb)
+ Planning time: 0.482 ms
+ Total runtime: 1.783 ms
+(7 rows)
+</code></pre>
+
+<p>Ou mesmo:</p>
+
+<pre><code>explain analyze select * from test where v @&gt; '{"i":42, "r":1}';
+                                                     QUERY PLAN                                                     
+--------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on test  (cost=52.77..343.23 rows=100 width=42) (actual time=1.171..1.191 rows=3 loops=1)
+   Recheck Cond: (v @&gt; '{"i": 42, "r": 1}'::jsonb)
+   Heap Blocks: exact=3
+   -&gt;  Bitmap Index Scan on whatever  (cost=0.00..52.75 rows=100 width=0) (actual time=1.143..1.143 rows=3 loops=1)
+         Index Cond: (v @&gt; '{"i": 42, "r": 1}'::jsonb)
+ Planning time: 0.530 ms
+ Total runtime: 1.256 ms
+(7 rows)
+</code></pre>
+
+<p>Isso é muito legal.</p>
+
+<p>Infelizmente você não pode utilizar índices para realizar uma pesquisa mais &ldquo;profunda&rdquo;. O que significa isso?</p>
+
+<p>Vamos supor que você tem um valor JSON como este:</p>
+
+<pre><code>{"a": [1,2,3,4]}
+</code></pre>
+
+<p>Você pode indexá-lo, e pesquisar por &ldquo;value ? &lsquo;a&rsquo;&rdquo;, ou &ldquo;value @> &lsquo;{&#8220;a&rdquo;:[1,2,3,4]}&rsquo;&ldquo;, mas você não pode pesquisar (utilizando índice) por &#8220;linhas que tenha 3 na matriz que está sob a chave &lsquo;a&rsquo; no json&rdquo;.</p>
+
+<p>É claro que você pode trabalhar em torno dele criando índice em ((value &ndash;> &lsquo;a&rsquo;)), se for isso que você realmente precisa.</p>
+
+<p>De qualquer maneira eu realmente gostei disso. Parece que funciona muito bem, e eu espero que tenhamos mais recursos no futuro.</p>
+
+<p>Valeu pessoal.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/04/26/projeto-aceito-no-google-summer-of-code-2014-gsoc2014/">Projeto Aceito No Google Summer of Code 2014 (GSoC2014)</a></h1>
     
     
@@ -100,6 +397,9 @@
 
 
 <time datetime="2014-04-26T12:24:51-03:00" pubdate data-updated="true">Apr 26<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/04/26/projeto-aceito-no-google-summer-of-code-2014-gsoc2014/#disqus_thread"
+             data-disqus-identifier="http://fabriziomello.github.io/blog/2014/04/26/projeto-aceito-no-google-summer-of-code-2014-gsoc2014/">Comments</a>
         
       </p>
     
@@ -469,51 +769,6 @@ Olá Fabrízio !! Estou com um problema no postgresql e estou na minha primeira 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/10/11/video-com-atividade-do-repositorio-git/">Vídeo Com Atividade Do Repositório GIT Do PostgreSQL Nos últimos Meses</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-10-11T00:00:00-03:00" pubdate data-updated="true">Oct 11<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-<span class="Apple-style-span" style="font-family: arial; font-size: x-small;"></span><br /><div>Pessoal,</div><div><br /></div><div>Montei um pequeno vídeo [1] que mostra a atividade do repositório GIT do PostgreSQL nos últimos meses.</div><div><br /></div><div>Para gerar o vídeo usei o Gource [2].</div><div><br /></div><div><br /></div><div>[1]&nbsp;<a href="http://www.vimeo.com/30394945">http://www.vimeo.com/30394945</a></div><div>[2]&nbsp;<a href="http://code.google.com/p/gource/">http://code.google.com/p/gource/</a></div><div><br /></div><div><br /></div><span class="Apple-style-span" style="background-color: white; color: #333333; font-family: Verdana, Arial, sans-serif; font-size: 13px; line-height: 16px;">&#8212;<br />Fabrízio Mello<br />fabriziomello [at] gmail.com</span></div>
-<h2>Comments</h2>
-<div class='comments'>
-<div class='comment'>
-<div class='author'>Anonymous</div>
-<div class='content'>
-preciso de sua ajuda, meu banco SQL caiu e não volta, depois d euma queda de energia.<br /><br />alan_andreani@windowslive.com MsN<br /><br />obrigado</div>
-</div>
-</div>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -527,6 +782,10 @@ preciso de sua ajuda, meu banco SQL caiu e não volta, depois d euma queda de en
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/05/01/aguardando-pela-9-dot-4-introduzindo-jsonb/">Aguardando Pela 9.4 - Introduzindo JSONB</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/04/26/projeto-aceito-no-google-summer-of-code-2014-gsoc2014/">Projeto Aceito No Google Summer of Code 2014 (GSoC2014)</a>
@@ -544,11 +803,36 @@ preciso de sua ajuda, meu banco SQL caiu e não volta, depois d euma queda de en
         <a href="/blog/2013/06/10/bad-smells-mal-cheiros-em-bancos-de/">Bad Smells (Mal Cheiros) Em Bancos De Dados</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/02/21/postgresql-93devel-nova-extensao/">PostgreSQL 9.3devel - Nova Extensão &#8220;Postgres_fdw&#8221;</a>
-      </li>
-    
   </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fabriziomello">@fabriziomello</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fabriziomello',
+            count: 4,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
 </section>
 
 
@@ -576,6 +860,19 @@ preciso de sua ajuda, meu banco SQL caiu e não volta, depois d euma queda de en
 
 </footer>
   
+
+<script type="text/javascript">
+      var disqus_shortname = 'fabriziomello';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
 
 
 
